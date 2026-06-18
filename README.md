@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -50,19 +50,14 @@
             gap: 12px;
             font-size: 1.5em;
             font-weight: 700;
-            /* НЕЛЬЗЯ УБРАТЬ - логотип встроен в код! */
             user-select: none;
             -webkit-user-select: none;
         }
 
-        /* ============================================================
-           ОСНОВНОЙ ЛОГОТИП — ВСТРОЕННЫЙ SVG
-           ============================================================ */
         .logo svg {
             width: 50px;
             height: 50px;
             flex-shrink: 0;
-            /* Запрещаем изменение размера */
             filter: drop-shadow(0 0 10px rgba(123, 47, 252, 0.3));
             transition: filter 0.3s;
         }
@@ -70,17 +65,6 @@
         .logo svg:hover {
             filter: drop-shadow(0 0 20px rgba(123, 47, 252, 0.6));
         }
-
-        /* Альтернативный вариант - если хочешь картинку, раскомментируй и закомментируй SVG выше */
-        /*
-        .logo img {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
-            object-fit: contain;
-            flex-shrink: 0;
-        }
-        */
 
         .logo-text {
             background: linear-gradient(135deg, #00d4ff, #7b2ffc);
@@ -103,7 +87,6 @@
             margin-left: 5px;
         }
 
-        /* Правый блок шапки */
         .header-right {
             display: flex;
             align-items: center;
@@ -256,6 +239,10 @@
         }
         .output .system {
             color: #7b9fff;
+        }
+        .output .input-prompt {
+            color: #ffd93d;
+            font-weight: bold;
         }
 
         .toolbar {
@@ -547,39 +534,22 @@
 
     <div class="container">
         <!-- ============================================================
-        ШАПКА С ВСТРОЕННЫМ ЛОГОТИПОМ (НЕУБИРАЕМЫЙ)
+        ШАПКА С ВСТРОЕННЫМ ЛОГОТИПОМ
         ============================================================ -->
         <header>
             <div class="logo">
-                <!-- ============================================================
-                ОСНОВНОЙ ЛОГОТИП ТРИТОНА — ВСТРОЕН НАВСЕГДА!
-                ============================================================ -->
                 <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Фон -->
                     <circle cx="100" cy="100" r="90" fill="#0a0e17" stroke="#7b2ffc" stroke-width="4"/>
-
-                    <!-- Буква Т (волна) -->
-                    <path d="M 50 40 L 150 40 L 150 65 L 110 65 L 110 160 L 90 160 L 90 65 L 50 65 Z"
-                          fill="#00d4ff" opacity="0.9"/>
-
-                    <!-- Вторичная волна -->
-                    <path d="M 60 85 Q 100 70 140 85 Q 160 95 170 85"
-                          stroke="#7b2ffc" stroke-width="3" fill="none"/>
-
-                    <!-- Атомы/круги -->
+                    <path d="M 50 40 L 150 40 L 150 65 L 110 65 L 110 160 L 90 160 L 90 65 L 50 65 Z" fill="#00d4ff" opacity="0.9"/>
+                    <path d="M 60 85 Q 100 70 140 85 Q 160 95 170 85" stroke="#7b2ffc" stroke-width="3" fill="none"/>
                     <circle cx="60" cy="130" r="12" fill="#7b2ffc" opacity="0.6"/>
                     <circle cx="100" cy="150" r="10" fill="#00d4ff" opacity="0.6"/>
                     <circle cx="140" cy="130" r="12" fill="#7b2ffc" opacity="0.6"/>
-
-                    <!-- Название -->
-                    <text x="100" y="185" text-anchor="middle" fill="#c8d0e0"
-                          font-family="Arial" font-size="18" font-weight="bold">ТРИТОН</text>
+                    <text x="100" y="185" text-anchor="middle" fill="#c8d0e0" font-family="Arial" font-size="18" font-weight="bold">ТРИТОН</text>
                 </svg>
-
                 <span class="logo-text">Тритон</span>
                 <span class="logo-badge">✅ РАБОТАЕТ!</span>
             </div>
-
             <div class="header-right">
                 <span class="info">⚡ <span>100+</span> команд</span>
                 <span class="info">📚 Встроенная справка</span>
@@ -614,32 +584,19 @@
                         <span>📝 Код на Тритоне</span>
                         <span class="badge" style="background:#1a2a40;color:#7b8baa;border:none;">.тритон</span>
                     </div>
-                    <textarea id="code" spellcheck="false">// Первая программа на Тритоне
-скажи("Привет, мир!")
+                    <textarea id="code" spellcheck="false">// Пример с командой СПРОСИ (работает!)
+скажи("Привет! Как тебя зовут?")
+спроси имя
+скажи("Приятно познакомиться, " + имя + "!")
 
-имя = "Алексей"
-возраст = 30
+скажи("Сколько тебе лет?")
+спроси возраст
+скажи("Тебе " + возраст + " лет!")
 
-скажи("Меня зовут " + имя)
-скажи("Через 5 лет мне будет " + (возраст + 5))
-
-если возраст > 18 то
+если возраст >= 18 то
     скажи("Ты взрослый!")
 иначе
     скажи("Ты ещё ребёнок!")
-конец
-
-// Цикл
-счет = 0
-пока счет < 3 то
-    скажи("Счёт: " + счет)
-    счет = счет + 1
-конец
-
-// Список
-дела = ["Учеба", "Еда", "Сон"]
-для дело из дела то
-    скажи("Дело: " + дело)
 конец</textarea>
                 </div>
 
@@ -670,11 +627,10 @@
         </div>
 
         <!-- ============================================================
-        ПОДВАЛ С ЛОГОТИПОМ (НЕУБИРАЕМЫЙ)
+        ПОДВАЛ С ЛОГОТИПОМ
         ============================================================ -->
         <footer>
             <div class="footer-logo">
-                <!-- Маленький логотип в подвале -->
                 <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" width="30" height="30">
                     <circle cx="100" cy="100" r="90" fill="#0a0e17" stroke="#7b2ffc" stroke-width="4"/>
                     <path d="M 50 40 L 150 40 L 150 65 L 110 65 L 110 160 L 90 160 L 90 65 L 50 65 Z" fill="#00d4ff" opacity="0.9"/>
@@ -700,7 +656,7 @@
             { cmd: 'скажи(выражение)', desc: 'Выводит текст или значение на экран.', example: 'скажи("Привет, мир!")',
                 tags: ['вывод'] },
             { cmd: 'спроси переменная', desc: 'Запрашивает ввод от пользователя и сохраняет в переменную.',
-                example: 'спроси возраст', tags: ['ввод'] },
+                example: 'спроси имя', tags: ['ввод'] },
             { cmd: 'остановить', desc: 'Немедленно завершает программу.', example: 'остановить', tags: ['управление'] },
             { cmd: 'подождать(мс)', desc: 'Приостанавливает программу на указанное количество миллисекунд.',
                 example: 'подождать(2000)', tags: ['таймер'] },
@@ -957,7 +913,7 @@
         ];
 
         // ================================================================
-        // РАБОЧИЙ ИНТЕРПРЕТАТОР ТРИТОНА
+        // ИСПРАВЛЕННЫЙ ИНТЕРПРЕТАТОР ТРИТОНА (РАБОТАЕТ СПРОСИ!)
         // ================================================================
 
         function runCode() {
@@ -976,6 +932,7 @@
             const functions = {};
             let outputText = [];
 
+            // Функция для логирования
             function log(msg, type = 'log') {
                 outputText.push(msg);
                 const div = document.createElement('div');
@@ -984,23 +941,34 @@
                 output.appendChild(div);
             }
 
+            // Функция для запроса ввода (СПРОСИ)
+            function askUser(promptText) {
+                const val = prompt(promptText);
+                return val !== null ? val : '';
+            }
+
+            // Функция вычисления значений
             function getValue(expr) {
                 expr = expr.trim();
 
                 if (!expr) return '';
 
+                // Строка в кавычках
                 if ((expr.startsWith('"') && expr.endsWith('"')) ||
                     (expr.startsWith("'") && expr.endsWith("'"))) {
                     return expr.slice(1, -1);
                 }
 
+                // Число
                 if (/^-?\d+(\.\d+)?$/.test(expr)) {
                     return parseFloat(expr);
                 }
 
+                // Булевы
                 if (expr === 'истина') return true;
                 if (expr === 'ложь') return false;
 
+                // Список
                 if (expr.startsWith('[') && expr.endsWith(']')) {
                     const content = expr.slice(1, -1).trim();
                     if (!content) return [];
@@ -1036,13 +1004,14 @@
                     return items;
                 }
 
+                // Вызов функции
                 const funcMatch = expr.match(/^(\w+)\s*\(([^)]*)\)$/);
                 if (funcMatch) {
                     const name = funcMatch[1];
                     const argsStr = funcMatch[2].trim();
                     const args = argsStr ? argsStr.split(',').map(s => getValue(s.trim())) : [];
 
-                    // Встроенные функции (сокращённо)
+                    // Встроенные функции
                     const builtins = {
                         'длина': (a) => Array.isArray(a) ? a.length : (typeof a === 'string' ? a.length : 0),
                         'добавить': (a, b) => { if (Array.isArray(a)) { a.push(b); return a; } return a; },
@@ -1118,6 +1087,7 @@
                         return builtins[name](...args);
                     }
 
+                    // Пользовательская функция
                     if (functions[name]) {
                         const func = functions[name];
                         const oldVars = { ...variables };
@@ -1142,6 +1112,12 @@
                                 } else if (line.startsWith('скажи')) {
                                     const m = line.match(/скажи\((.*)\)/);
                                     if (m) log(String(getValue(m[1].trim())));
+                                } else if (line.startsWith('спроси')) {
+                                    const m = line.match(/спроси\s+(\w+)/);
+                                    if (m) {
+                                        const val = askUser('Введите значение для "' + m[1] + '":');
+                                        variables[m[1]] = val;
+                                    }
                                 }
                             }
                             k++;
@@ -1153,6 +1129,7 @@
                     return expr;
                 }
 
+                // Арифметика
                 let processed = expr;
 
                 while (processed.includes('(')) {
@@ -1269,6 +1246,7 @@
                 return result;
             }
 
+            // ГЛАВНАЯ ФУНКЦИЯ ВЫПОЛНЕНИЯ
             function execute(lines, startIdx) {
                 let i = startIdx;
                 while (i < lines.length) {
@@ -1277,6 +1255,9 @@
 
                     if (!line || line.startsWith('//') || line.startsWith('#')) continue;
 
+                    // ============================================================
+                    // КОМАНДА: скажи / вывод / печать / показать
+                    // ============================================================
                     if (line.startsWith('скажи') || line.startsWith('вывод') ||
                         line.startsWith('печать') || line.startsWith('показать')) {
                         const match = line.match(/(скажи|вывод|печать|показать)\((.*)\)/);
@@ -1287,19 +1268,31 @@
                         continue;
                     }
 
+                    // ============================================================
+                    // КОМАНДА: спроси — ИСПРАВЛЕНА!
+                    // ============================================================
                     if (line.startsWith('спроси')) {
                         const match = line.match(/спроси\s+(\w+)/);
                         if (match) {
-                            const val = prompt('Введите значение для "' + match[1] + '":');
-                            variables[match[1]] = val !== null ? val : '';
+                            const varName = match[1];
+                            const promptText = 'Введите значение для "' + varName + '":';
+                            const val = askUser(promptText);
+                            variables[varName] = val;
+                            log('📥 Ввод: ' + varName + ' = ' + val, 'info');
                         }
                         continue;
                     }
 
+                    // ============================================================
+                    // КОМАНДА: остановить
+                    // ============================================================
                     if (line === 'остановить') {
                         return lines.length;
                     }
 
+                    // ============================================================
+                    // КОМАНДА: подождать / задержка / пауза
+                    // ============================================================
                     if (line.startsWith('подождать') || line.startsWith('задержка') || line.startsWith('пауза')) {
                         const match = line.match(/(подождать|задержка|пауза)\((\d+)\)/);
                         if (match) {
@@ -1310,11 +1303,17 @@
                         continue;
                     }
 
+                    // ============================================================
+                    // КОМАНДА: очистить
+                    // ============================================================
                     if (line === 'очистить') {
                         output.innerHTML = '';
                         continue;
                     }
 
+                    // ============================================================
+                    // ПРИСВАИВАНИЕ ПЕРЕМЕННОЙ
+                    // ============================================================
                     if (line.includes('=') && !line.startsWith('если') && !line.startsWith('пока') &&
                         !line.startsWith('для') && !line.startsWith('функция') && !line.startsWith('константа')) {
                         const parts = line.split('=');
@@ -1324,6 +1323,9 @@
                         continue;
                     }
 
+                    // ============================================================
+                    // КОМАНДА: константа
+                    // ============================================================
                     if (line.startsWith('константа')) {
                         const match = line.match(/константа\s+(\w+)\s*=\s*(.+)/);
                         if (match) {
@@ -1335,6 +1337,9 @@
                         continue;
                     }
 
+                    // ============================================================
+                    // УСЛОВИЕ: если
+                    // ============================================================
                     if (line.startsWith('если')) {
                         const match = line.match(/если\s+(.+?)\s+то/);
                         if (match) {
@@ -1371,8 +1376,8 @@
                                     } else if (bl.startsWith('спроси')) {
                                         const m = bl.match(/спроси\s+(\w+)/);
                                         if (m) {
-                                            const val = prompt('Введите значение:');
-                                            variables[m[1]] = val !== null ? val : '';
+                                            const val = askUser('Введите значение для "' + m[1] + '":');
+                                            variables[m[1]] = val;
                                         }
                                     }
                                     k++;
@@ -1407,6 +1412,12 @@
                                             } else if (bl.startsWith('скажи')) {
                                                 const m = bl.match(/скажи\((.*)\)/);
                                                 if (m) log(String(getValue(m[1].trim())));
+                                            } else if (bl.startsWith('спроси')) {
+                                                const m = bl.match(/спроси\s+(\w+)/);
+                                                if (m) {
+                                                    const val = askUser('Введите значение для "' + m[1] + '":');
+                                                    variables[m[1]] = val;
+                                                }
                                             }
                                             k++;
                                         }
@@ -1419,10 +1430,16 @@
                         }
                     }
 
+                    // ============================================================
+                    // УСЛОВИЕ: иначе_если
+                    // ============================================================
                     if (line.startsWith('иначе_если')) {
                         continue;
                     }
 
+                    // ============================================================
+                    // УСЛОВИЕ: выбор
+                    // ============================================================
                     if (line.startsWith('выбор')) {
                         const match = line.match(/выбор\s+(\w+)/);
                         if (match) {
@@ -1455,6 +1472,12 @@
                                                 } else if (bl.startsWith('скажи')) {
                                                     const m2 = bl.match(/скажи\((.*)\)/);
                                                     if (m2) log(String(getValue(m2[1].trim())));
+                                                } else if (bl.startsWith('спроси')) {
+                                                    const m2 = bl.match(/спроси\s+(\w+)/);
+                                                    if (m2) {
+                                                        const val = askUser('Введите значение для "' + m2[1] + '":');
+                                                        variables[m2[1]] = val;
+                                                    }
                                                 }
                                                 j++;
                                             }
@@ -1474,6 +1497,12 @@
                                         } else if (bl.startsWith('скажи')) {
                                             const m2 = bl.match(/скажи\((.*)\)/);
                                             if (m2) log(String(getValue(m2[1].trim())));
+                                        } else if (bl.startsWith('спроси')) {
+                                            const m2 = bl.match(/спроси\s+(\w+)/);
+                                            if (m2) {
+                                                const val = askUser('Введите значение для "' + m2[1] + '":');
+                                                variables[m2[1]] = val;
+                                            }
                                         }
                                         j++;
                                     }
@@ -1485,6 +1514,9 @@
                         }
                     }
 
+                    // ============================================================
+                    // ЦИКЛ: пока
+                    // ============================================================
                     if (line.startsWith('пока')) {
                         const match = line.match(/пока\s+(.+?)\s+то/);
                         if (match) {
@@ -1519,8 +1551,8 @@
                                         } else if (bl.startsWith('спроси')) {
                                             const m = bl.match(/спроси\s+(\w+)/);
                                             if (m) {
-                                                const val = prompt('Введите значение:');
-                                                variables[m[1]] = val !== null ? val : '';
+                                                const val = askUser('Введите значение для "' + m[1] + '":');
+                                                variables[m[1]] = val;
                                             }
                                         } else if (bl.startsWith('если')) {
                                             const m2 = bl.match(/если\s+(.+?)\s+то/);
@@ -1544,6 +1576,13 @@
                                                             } else if (bl2.startsWith('скажи')) {
                                                                 const m3 = bl2.match(/скажи\((.*)\)/);
                                                                 if (m3) log(String(getValue(m3[1].trim())));
+                                                            } else if (bl2.startsWith('спроси')) {
+                                                                const m3 = bl2.match(/спроси\s+(\w+)/);
+                                                                if (m3) {
+                                                                    const val = askUser('Введите значение для "' + m3[
+                                                                        1] + '":');
+                                                                    variables[m3[1]] = val;
+                                                                }
                                                             }
                                                         }
                                                         k++;
@@ -1568,6 +1607,13 @@
                                                                 } else if (bl2.startsWith('скажи')) {
                                                                     const m3 = bl2.match(/скажи\((.*)\)/);
                                                                     if (m3) log(String(getValue(m3[1].trim())));
+                                                                } else if (bl2.startsWith('спроси')) {
+                                                                    const m3 = bl2.match(/спроси\s+(\w+)/);
+                                                                    if (m3) {
+                                                                        const val = askUser('Введите значение для "' +
+                                                                            m3[1] + '":');
+                                                                        variables[m3[1]] = val;
+                                                                    }
                                                                 }
                                                                 k++;
                                                             }
@@ -1593,6 +1639,9 @@
                         }
                     }
 
+                    // ============================================================
+                    // ЦИКЛ: для
+                    // ============================================================
                     if (line.startsWith('для')) {
                         const match = line.match(/для\s+(\w+)\s+из\s+(.+?)\s+то/);
                         if (match) {
@@ -1627,8 +1676,8 @@
                                             } else if (bl.startsWith('спроси')) {
                                                 const m = bl.match(/спроси\s+(\w+)/);
                                                 if (m) {
-                                                    const val = prompt('Введите значение:');
-                                                    variables[m[1]] = val !== null ? val : '';
+                                                    const val = askUser('Введите значение для "' + m[1] + '":');
+                                                    variables[m[1]] = val;
                                                 }
                                             } else if (bl.startsWith('если')) {
                                                 const m2 = bl.match(/если\s+(.+?)\s+то/);
@@ -1652,6 +1701,13 @@
                                                                 } else if (bl2.startsWith('скажи')) {
                                                                     const m3 = bl2.match(/скажи\((.*)\)/);
                                                                     if (m3) log(String(getValue(m3[1].trim())));
+                                                                } else if (bl2.startsWith('спроси')) {
+                                                                    const m3 = bl2.match(/спроси\s+(\w+)/);
+                                                                    if (m3) {
+                                                                        const val = askUser('Введите значение для "' +
+                                                                            m3[1] + '":');
+                                                                        variables[m3[1]] = val;
+                                                                    }
                                                                 }
                                                             }
                                                             k++;
@@ -1676,6 +1732,13 @@
                                                                     } else if (bl2.startsWith('скажи')) {
                                                                         const m3 = bl2.match(/скажи\((.*)\)/);
                                                                         if (m3) log(String(getValue(m3[1].trim())));
+                                                                    } else if (bl2.startsWith('спроси')) {
+                                                                        const m3 = bl2.match(/спроси\s+(\w+)/);
+                                                                        if (m3) {
+                                                                            const val = askUser('Введите значение для "' +
+                                                                                m3[1] + '":');
+                                                                            variables[m3[1]] = val;
+                                                                        }
                                                                     }
                                                                     k++;
                                                                 }
@@ -1696,6 +1759,9 @@
                         }
                     }
 
+                    // ============================================================
+                    // ФУНКЦИЯ
+                    // ============================================================
                     if (line.startsWith('функция')) {
                         const match = line.match(/функция\s+(\w+)\s*\(([^)]*)\)/);
                         if (match) {
@@ -1715,10 +1781,16 @@
                         }
                     }
 
+                    // ============================================================
+                    // ВЕРНУТЬ (обрабатывается внутри функции)
+                    // ============================================================
                     if (line.startsWith('вернуть')) {
                         continue;
                     }
 
+                    // ============================================================
+                    // ПОВТОРИТЬ
+                    // ============================================================
                     if (line.startsWith('повторить')) {
                         const match = line.match(/повторить\((\d+)\)/);
                         if (match) {
@@ -1747,6 +1819,12 @@
                                     } else if (bl.startsWith('скажи')) {
                                         const m = bl.match(/скажи\((.*)\)/);
                                         if (m) log(String(getValue(m[1].trim())));
+                                    } else if (bl.startsWith('спроси')) {
+                                        const m = bl.match(/спроси\s+(\w+)/);
+                                        if (m) {
+                                            const val = askUser('Введите значение для "' + m[1] + '":');
+                                            variables[m[1]] = val;
+                                        }
                                     }
                                     k++;
                                 }
@@ -1756,14 +1834,19 @@
                         }
                     }
 
+                    // ============================================================
+                    // ПРЕРВАТЬ / ПРОДОЛЖИТЬ (обрабатываются внутри циклов)
+                    // ============================================================
                     if (line === 'прервать') {
                         continue;
                     }
-
                     if (line === 'продолжить') {
                         continue;
                     }
 
+                    // ============================================================
+                    // ЦВЕТ
+                    // ============================================================
                     if (line.startsWith('цвет')) {
                         const match = line.match(/цвет\(["'](.+?)["']\)/);
                         if (match) {
@@ -1810,6 +1893,9 @@
                         continue;
                     }
 
+                    // ============================================================
+                    // ПРОГРЕСС
+                    // ============================================================
                     if (line.startsWith('прогресс')) {
                         const match = line.match(/прогресс\((\d+)\s*,\s*(\d+)\)/);
                         if (match) {
@@ -1822,6 +1908,9 @@
                         continue;
                     }
 
+                    // ============================================================
+                    // ОБРАБОТКА ОШИБОК
+                    // ============================================================
                     if (line === 'попробовать') {
                         let j = i;
                         let level = 1;
@@ -1856,6 +1945,9 @@
                         continue;
                     }
 
+                    // ============================================================
+                    // ОТЛАДКА
+                    // ============================================================
                     if (line.startsWith('отладка')) {
                         const match = line.match(/отладка\((\w+)\)/);
                         if (match) {
@@ -1866,11 +1958,17 @@
                         continue;
                     }
 
+                    // ============================================================
+                    // ЖДАТЬ_НАЖАТИЕ
+                    // ============================================================
                     if (line === 'ждать_нажатие()') {
                         alert('Нажмите OK чтобы продолжить...');
                         continue;
                     }
 
+                    // ============================================================
+                    // ВРЕМЯ_ВЫПОЛНЕНИЯ
+                    // ============================================================
                     if (line.startsWith('время_выполнения')) {
                         const match = line.match(/время_выполнения\((\w+)\)/);
                         if (match) {
@@ -1897,6 +1995,12 @@
                                         } else if (l.startsWith('скажи')) {
                                             const m = l.match(/скажи\((.*)\)/);
                                             if (m) log(String(getValue(m[1].trim())));
+                                        } else if (l.startsWith('спроси')) {
+                                            const m = l.match(/спроси\s+(\w+)/);
+                                            if (m) {
+                                                const val = askUser('Введите значение для "' + m[1] + '":');
+                                                variables[m[1]] = val;
+                                            }
                                         }
                                     }
                                     k++;
@@ -1910,6 +2014,9 @@
                         continue;
                     }
 
+                    // ============================================================
+                    // ПРОВЕРИТЬ_ТИП
+                    // ============================================================
                     if (line.startsWith('проверить_тип')) {
                         const match = line.match(/проверить_тип\((\w+)\s*,\s*["'](.+?)["']\)/);
                         if (match) {
@@ -1921,6 +2028,9 @@
                         continue;
                     }
 
+                    // ============================================================
+                    // ПРЕОБРАЗОВАТЬ_В_ЧИСЛО
+                    // ============================================================
                     if (line.startsWith('преобразовать_в_число')) {
                         const match = line.match(/преобразовать_в_число\(["'](.+?)["']\)/);
                         if (match) {
@@ -1929,6 +2039,9 @@
                         continue;
                     }
 
+                    // ============================================================
+                    // ПРЕОБРАЗОВАТЬ_В_СТРОКУ
+                    // ============================================================
                     if (line.startsWith('преобразовать_в_строку')) {
                         const match = line.match(/преобразовать_в_строку\((.+)\)/);
                         if (match) {
@@ -1937,6 +2050,9 @@
                         continue;
                     }
 
+                    // ============================================================
+                    // РАНДОМНОЕ_ИМЯ
+                    // ============================================================
                     if (line.startsWith('рандомное_имя')) {
                         const chars = 'abcdefghijklmnopqrstuvwxyz';
                         let name = '';
@@ -2101,7 +2217,7 @@
             console.log('🐚 Тритон загружен!');
             console.log(`📚 Всего команд: ${commands.length}`);
             console.log('▶️ Нажми Ctrl+Enter для запуска');
-            console.log('🖼️ Логотип Тритона ВСТРОЕН НАВСЕГДА!');
+            console.log('✅ Команда "спроси" ИСПРАВЛЕНА и РАБОТАЕТ!');
         };
     </script>
 
