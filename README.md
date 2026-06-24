@@ -1,5 +1,4 @@
 
-
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -344,6 +343,49 @@
       margin: 0 4px;
     }
 
+    /* Блок со ссылкой на канал в Max */
+    .max-channel {
+      margin: 1.5rem 0 1rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, #fff2e0, #ffe8d0);
+      border-radius: 60px 20px 60px 20px;
+      border: 2px solid #f5dec6;
+      text-align: center;
+      box-shadow: 0 8px 20px -6px #dac09a;
+    }
+    .max-channel .channel-link {
+      display: inline-block;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #3b5a69;
+      background: white;
+      padding: 0.6rem 2rem;
+      border-radius: 60px;
+      text-decoration: none;
+      border: 2px solid #dba56d;
+      transition: 0.2s;
+      box-shadow: 0 4px 12px rgba(219, 165, 109, 0.25);
+    }
+    .max-channel .channel-link i {
+      color: #dba56d;
+      margin-right: 10px;
+    }
+    .max-channel .channel-link:hover {
+      background: #f5e4cf;
+      transform: scale(1.02);
+      border-color: #c29a6b;
+    }
+    .max-channel .channel-label {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #4d6b78;
+      margin-bottom: 0.5rem;
+    }
+    .max-channel .channel-label i {
+      color: #dba56d;
+      margin-right: 6px;
+    }
+
     .extra-prices {
       display: flex;
       flex-wrap: wrap;
@@ -370,6 +412,10 @@
       .contacts-block .contact-email {
         font-size: 1.1rem;
         padding: 0.3rem 1rem;
+      }
+      .max-channel .channel-link {
+        font-size: 1.1rem;
+        padding: 0.4rem 1.2rem;
       }
     }
   </style>
@@ -551,6 +597,16 @@
     </div>
   </div>
 
+  <!-- ============ ССЫЛКА НА КАНАЛ В MAX ============ -->
+  <div class="max-channel">
+    <div class="channel-label">
+      <i class="fas fa-broadcast-tower"></i> Наш канал в Max
+    </div>
+    <a href="https://max.ru/join/XOwp5TOPv0W-dqYNgy6mLc4DOKP4KmvmQ7C7ZSputR4" target="_blank" class="channel-link">
+      <i class="fas fa-external-link-alt"></i> Перейти в канал
+    </a>
+  </div>
+
   <!-- Дополнительные цены -->
   <div class="extra-prices">
     <div><i class="fas fa-cubes"></i> Аренда сайтов <strong>256 ₽/мес</strong></div>
@@ -564,7 +620,6 @@
 <!-- Скрипт для плавной прокрутки к контактам -->
 <script>
   (function() {
-    // Находим все кнопки с классом scroll-to-contacts
     const buttons = document.querySelectorAll('.scroll-to-contacts');
     const contactsBlock = document.getElementById('contacts');
 
@@ -574,13 +629,11 @@
       btn.addEventListener('click', function(e) {
         e.preventDefault();
 
-        // Плавно скроллим к блоку контактов
         contactsBlock.scrollIntoView({
           behavior: 'smooth',
           block: 'start'
         });
 
-        // Подсветка блока
         setTimeout(function() {
           contactsBlock.classList.add('highlight');
           setTimeout(function() {
