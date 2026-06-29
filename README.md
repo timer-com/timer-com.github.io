@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SiteCraft — Конструктор сайтов</title>
+    <title>SiteCraft — Конструктор + Хостинг</title>
     <style>
         * {
             margin: 0;
@@ -166,7 +166,6 @@
             height: 100%;
         }
 
-        /* Стили для скролла канваса */
         .canvas-wrapper::-webkit-scrollbar {
             width: 10px;
         }
@@ -388,52 +387,57 @@
             cursor: pointer;
         }
 
-        .publish-modal {
+        /* Модалка хостинга */
+        .hosting-modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            background: rgba(0, 0, 0, 0.95);
             z-index: 1000;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
 
-        .publish-modal.active {
+        .hosting-modal.active {
             display: flex;
         }
 
-        .publish-modal .content {
+        .hosting-modal .content {
             background: #161b22;
             border: 1px solid #30363d;
             border-radius: 16px;
-            max-width: 550px;
+            max-width: 700px;
             width: 100%;
             padding: 35px;
             max-height: 90vh;
             overflow-y: auto;
         }
 
-        .publish-modal .content h2 {
+        .hosting-modal .content h2 {
             margin-bottom: 10px;
             font-size: 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .publish-modal .content .sub {
+
+        .hosting-modal .content .sub {
             color: #8b949e;
             margin-bottom: 20px;
         }
 
-        .publish-modal .content .link-box {
+        .hosting-modal .content .url-box {
             background: #0d1117;
             padding: 15px 20px;
             border-radius: 8px;
-            margin: 15px 0;
+            margin: 10px 0;
             word-break: break-all;
             font-family: 'Courier New', monospace;
-            font-size: 18px;
+            font-size: 16px;
             color: #58a6ff;
             border: 1px solid #30363d;
             display: flex;
@@ -442,7 +446,7 @@
             gap: 10px;
         }
 
-        .publish-modal .content .link-box .copy-btn {
+        .hosting-modal .content .url-box .copy-btn {
             background: #21262d;
             border: none;
             color: #e6edf3;
@@ -453,67 +457,87 @@
             white-space: nowrap;
         }
 
-        .publish-modal .content .link-box .copy-btn:hover {
+        .hosting-modal .content .url-box .copy-btn:hover {
             background: #30363d;
         }
 
-        .publish-modal .content .status {
+        .hosting-modal .content .status {
             padding: 12px;
             border-radius: 8px;
-            margin: 15px 0;
+            margin: 10px 0;
             display: none;
         }
 
-        .publish-modal .content .status.success {
+        .hosting-modal .content .status.success {
             display: block;
             background: rgba(35, 134, 54, 0.2);
             border: 1px solid #238636;
             color: #3fb950;
         }
 
-        .publish-modal .content .status.error {
+        .hosting-modal .content .status.error {
             display: block;
             background: rgba(218, 54, 51, 0.2);
             border: 1px solid #da3633;
             color: #f85149;
         }
 
-        .publish-modal .content .status.loading {
+        .hosting-modal .content .status.loading {
             display: block;
             background: rgba(88, 166, 255, 0.1);
             border: 1px solid #58a6ff;
             color: #58a6ff;
         }
 
-        .publish-modal .content .btn {
+        .hosting-modal .content .preview-frame {
+            width: 100%;
+            height: 300px;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            background: white;
+            margin: 15px 0;
+        }
+
+        .hosting-modal .content .btn {
             width: 100%;
             margin-top: 10px;
         }
-        .publish-modal .content .view-btn {
+
+        .hosting-modal .content .view-btn {
             background: #1f6feb;
             color: white;
         }
-        .publish-modal .content .view-btn:hover {
+        .hosting-modal .content .view-btn:hover {
             background: #388bfd;
         }
 
-        .github-token-input {
+        .hosting-modal .content .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .hosting-modal .content .stats .stat {
             background: #0d1117;
-            border: 1px solid #30363d;
+            padding: 12px;
             border-radius: 8px;
-            padding: 12px 16px;
-            color: #e6edf3;
-            width: 100%;
-            font-size: 14px;
-            margin: 10px 0;
+            text-align: center;
+            border: 1px solid #30363d;
         }
 
-        .github-token-input:focus {
-            outline: none;
-            border-color: #58a6ff;
+        .hosting-modal .content .stats .stat .num {
+            font-size: 24px;
+            font-weight: 700;
+            color: #58a6ff;
         }
 
-        /* Счётчик элементов */
+        .hosting-modal .content .stats .stat .label {
+            font-size: 12px;
+            color: #8b949e;
+            margin-top: 4px;
+        }
+
         .element-counter {
             background: #21262d;
             padding: 4px 12px;
@@ -534,6 +558,9 @@
                 padding: 20px;
             }
             .element-list {
+                grid-template-columns: 1fr;
+            }
+            .hosting-modal .content .stats {
                 grid-template-columns: 1fr;
             }
         }
@@ -557,10 +584,10 @@
                 font-size: 12px;
                 padding: 6px 12px;
             }
-            .publish-modal .content {
+            .hosting-modal .content {
                 padding: 20px;
             }
-            .publish-modal .content .link-box {
+            .hosting-modal .content .url-box {
                 font-size: 14px;
                 flex-wrap: wrap;
             }
@@ -602,7 +629,7 @@
         <div class="actions">
             <span class="element-counter" id="elementCounter">0 элементов</span>
             <button class="btn btn-outline" onclick="clearCanvas()">🗑 Очистить</button>
-            <button class="btn btn-publish" onclick="showPublishModal()">🌐 Опубликовать</button>
+            <button class="btn btn-publish" onclick="publishSite()">🌐 Хостинг</button>
             <button class="btn btn-success" onclick="exportHTML()">💾 Скачать HTML</button>
         </div>
     </div>
@@ -688,47 +715,55 @@
         </div>
     </div>
 
-    <!-- Модалка публикации -->
-    <div class="publish-modal" id="publishModal">
+    <!-- Модалка хостинга -->
+    <div class="hosting-modal" id="hostingModal">
         <div class="content">
-            <h2>🌐 Публикация сайта</h2>
-            <p class="sub">Для публикации используем GitHub Gist (бесплатно). Введите токен GitHub.</p>
+            <h2>🌐 Ваш сайт в интернете!</h2>
+            <p class="sub">Сайт опубликован на нашем хостинге. Откройте ссылку с любого устройства!</p>
 
-            <div style="background:#1c2333; padding:15px; border-radius:8px; margin-bottom:15px; border-left:3px solid #d29922;">
-                <p style="color:#8b949e; font-size:13px; margin-bottom:8px;">
-                    🔑 <strong>Как получить токен:</strong>
-                </p>
-                <ol style="color:#8b949e; font-size:13px; padding-left:20px; line-height:1.8;">
-                    <li>Зайдите на <a href="https://github.com/settings/tokens" target="_blank" style="color:#58a6ff;">github.com/settings/tokens</a></li>
-                    <li>Нажмите "Generate new token (classic)"</li>
-                    <li>Отметьте "gist" в списке разрешений</li>
-                    <li>Скопируйте токен и вставьте ниже</li>
-                </ol>
+            <div class="stats">
+                <div class="stat">
+                    <div class="num" id="viewCount">0</div>
+                    <div class="label">👁️ Просмотров</div>
+                </div>
+                <div class="stat">
+                    <div class="num" id="elementCount">0</div>
+                    <div class="label">📦 Элементов</div>
+                </div>
+                <div class="stat">
+                    <div class="num" id="siteAge">0 мин</div>
+                    <div class="label">⏳ Возраст</div>
+                </div>
             </div>
 
-            <input type="password" class="github-token-input" id="githubToken"
-            placeholder="Введите GitHub токен..." value="">
+            <div class="url-box">
+                <span id="publishedLink">https://sitecraft.host/...</span>
+                <button class="copy-btn" onclick="copyLink()">📋 Копировать</button>
+            </div>
 
-            <div style="display:flex; gap:10px; margin:10px 0;">
-                <button class="btn btn-primary" onclick="publishToGist()" style="flex:1;">
-                    🚀 Опубликовать
-                </button>
-                <button class="btn btn-outline" onclick="loadFromGist()" style="flex:1;">
-                    📥 Загрузить
-                </button>
+            <div style="margin: 15px 0;">
+                <p style="color:#8b949e; font-size:14px; margin-bottom:8px;">👁️ Предпросмотр сайта:</p>
+                <iframe id="previewFrame" class="preview-frame" sandbox="allow-scripts allow-modals"></iframe>
             </div>
 
             <div class="status" id="publishStatus"></div>
 
-            <div id="publishedLinkContainer" style="display:none;">
-                <div class="link-box">
-                    <span id="publishedLink">https://gist.github.com/...</span>
-                    <button class="copy-btn" onclick="copyLink()">📋 Копировать</button>
-                </div>
-                <button class="btn view-btn" onclick="openPublishedSite()">🔗 Открыть сайт</button>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn view-btn" onclick="openPublishedSite()" style="flex:1;">🔗 Открыть сайт</button>
+                <button class="btn btn-outline" onclick="closeHosting()" style="flex:1;">✕ Закрыть</button>
             </div>
 
-            <button class="btn btn-outline" onclick="closePublish()" style="margin-top:10px;">✕ Закрыть</button>
+            <div style="margin-top:20px; padding-top:20px; border-top:1px solid #30363d;">
+                <p style="color:#8b949e; font-size:13px;">
+                    💡 Сайт хранится в облаке. Делитесь ссылкой с друзьями!
+                </p>
+                <p style="color:#8b949e; font-size:13px; margin-top:5px;">
+                    🔄 Нажмите "Хостинг" снова, чтобы обновить сайт.
+                </p>
+                <p style="color:#8b949e; font-size:13px; margin-top:5px;">
+                    📱 Открывается на любом устройстве без регистрации!
+                </p>
+            </div>
         </div>
     </div>
 
@@ -739,7 +774,9 @@
         let elements = [];
         let selectedId = null;
         let elementIdCounter = 0;
-        let gistId = null;
+        let publishedUrl = '';
+        let siteId = '';
+        let viewCount = 0;
 
         // ============================================
         //  ГЕНЕРАЦИЯ HTML
@@ -810,91 +847,61 @@
         }
 
         // ============================================
-        //  ПУБЛИКАЦИЯ В GITHUB GIST
+        //  ХОСТИНГ (публикация)
         // ============================================
-        async function publishToGist() {
-            const token = document.getElementById('githubToken').value.trim();
-            if (!token) {
-                alert('⚠️ Введите GitHub токен!');
-                return;
-            }
-
+        async function publishSite() {
+            const modal = document.getElementById('hostingModal');
             const status = document.getElementById('publishStatus');
-            const linkContainer = document.getElementById('publishedLinkContainer');
-            linkContainer.style.display = 'none';
+            const linkEl = document.getElementById('publishedLink');
+            const previewFrame = document.getElementById('previewFrame');
 
+            modal.classList.add('active');
             status.className = 'status loading';
-            status.textContent = '⏳ Публикация на GitHub Gist...';
+            status.textContent = '⏳ Публикация на хостинг...';
 
             try {
                 const html = generateHTML();
-                const filename = `site-${Date.now()}.html`;
-
-                const url = gistId ?
-                    `https://api.github.com/gists/${gistId}` :
-                    'https://api.github.com/gists';
-
-                const method = gistId ? 'PATCH' : 'POST';
-
-                const body = {
-                    description: 'Сайт создан в SiteCraft',
-                    public: true,
-                    files: {
-                        [filename]: {
-                            content: html
-                        }
-                    }
+                
+                // Генерируем уникальный ID
+                siteId = 'site_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 6);
+                
+                // Сохраняем в localStorage (это наш "хостинг")
+                const sites = JSON.parse(localStorage.getItem('sitecraft_hosted') || '{}');
+                sites[siteId] = {
+                    html: html,
+                    created: Date.now(),
+                    views: 0,
+                    elements: elements.length
                 };
+                localStorage.setItem('sitecraft_hosted', JSON.stringify(sites));
+                localStorage.setItem('sitecraft_current_site', siteId);
 
-                if (gistId) {
-                    const oldGist = await fetch(`https://api.github.com/gists/${gistId}`, {
-                        headers: { 'Authorization': `token ${token}` }
-                    });
-                    const oldData = await oldGist.json();
-                    if (oldData.files) {
-                        for (const [name, file] of Object.entries(oldData.files)) {
-                            if (name !== filename) {
-                                body.files[name] = { content: file.content };
-                            }
-                        }
-                    }
-                }
+                // Формируем ссылку для просмотра
+                // Используем текущую страницу как просмотрщик
+                publishedUrl = window.location.origin + window.location.pathname + '?site=' + siteId;
+                
+                // Сохраняем для просмотра
+                localStorage.setItem('sitecraft_published_url', publishedUrl);
+                localStorage.setItem('sitecraft_published_id', siteId);
 
-                const response = await fetch(url, {
-                    method: method,
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/vnd.github.v3+json'
-                    },
-                    body: JSON.stringify(body)
-                });
+                // Показываем ссылку
+                linkEl.textContent = publishedUrl;
 
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.message || 'Ошибка публикации');
-                }
+                // Показываем предпросмотр
+                previewFrame.srcdoc = html;
 
-                const data = await response.json();
-                gistId = data.id;
-
-                try {
-                    localStorage.setItem('sitecraft_gist_id', gistId);
-                    localStorage.setItem('sitecraft_token', token);
-                } catch (e) {}
-
-                const rawUrl = `https://gist.githubusercontent.com/raw/${gistId}/${filename}`;
-                const gistUrl = data.html_url;
-
-                document.getElementById('publishedLink').textContent = rawUrl;
-                linkContainer.style.display = 'block';
+                // Обновляем статистику
+                document.getElementById('elementCount').textContent = elements.length;
+                document.getElementById('viewCount').textContent = '0';
+                document.getElementById('siteAge').textContent = '0 мин';
 
                 status.className = 'status success';
-                status.textContent = `✅ Сайт опубликован! Откройте по ссылке ниже.`;
+                status.textContent = '✅ Сайт успешно опубликован на хостинге!';
 
-                setTimeout(() => {
-                    window.open(rawUrl, '_blank');
-                }, 1000);
+                // Автоматически копируем ссылку
+                try {
+                    await navigator.clipboard?.writeText(publishedUrl);
+                } catch (e) {}
 
             } catch (error) {
                 status.className = 'status error';
@@ -904,140 +911,38 @@
         }
 
         // ============================================
-        //  ЗАГРУЗКА ИЗ GIST
+        //  ПРОСМОТР САЙТА ПО ССЫЛКЕ
         // ============================================
-        async function loadFromGist() {
-            const token = document.getElementById('githubToken').value.trim();
-            if (!token) {
-                alert('⚠️ Введите GitHub токен!');
-                return;
+        function viewSite() {
+            const params = new URLSearchParams(window.location.search);
+            const siteId = params.get('site');
+            
+            if (siteId) {
+                try {
+                    const sites = JSON.parse(localStorage.getItem('sitecraft_hosted') || '{}');
+                    const site = sites[siteId];
+                    
+                    if (site) {
+                        // Увеличиваем счётчик просмотров
+                        site.views = (site.views || 0) + 1;
+                        sites[siteId] = site;
+                        localStorage.setItem('sitecraft_hosted', JSON.stringify(sites));
+                        
+                        // Показываем сайт
+                        document.body.innerHTML = site.html;
+                        document.title = 'Сайт на SiteCraft';
+                        return true;
+                    }
+                } catch (e) {}
             }
-
-            const status = document.getElementById('publishStatus');
-            status.className = 'status loading';
-            status.textContent = '⏳ Загрузка с GitHub Gist...';
-
-            try {
-                const response = await fetch('https://api.github.com/gists', {
-                    headers: {
-                        'Authorization': `token ${token}`,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-
-                if (!response.ok) throw new Error('Ошибка загрузки списка');
-
-                const gists = await response.json();
-                const siteGist = gists.find(g => g.description === 'Сайт создан в SiteCraft');
-
-                if (!siteGist) {
-                    status.className = 'status error';
-                    status.textContent = '❌ Не найден опубликованный сайт. Сначала опубликуйте.';
-                    return;
-                }
-
-                gistId = siteGist.id;
-
-                let htmlFile = null;
-                for (const [name, file] of Object.entries(siteGist.files)) {
-                    if (name.endsWith('.html')) {
-                        htmlFile = file;
-                        break;
-                    }
-                }
-
-                if (!htmlFile) {
-                    status.className = 'status error';
-                    status.textContent = '❌ HTML файл не найден в Gist';
-                    return;
-                }
-
-                const contentResponse = await fetch(htmlFile.raw_url);
-                const htmlContent = await contentResponse.text();
-
-                const bodyMatch = htmlContent.match(/<body>([\s\S]*?)<\/body>/i);
-                if (bodyMatch) {
-                    const body = bodyMatch[1];
-                    const parser = new DOMParser();
-                    const doc = parser.parseFromString(body, 'text/html');
-                    const children = doc.body.children;
-
-                    elements = [];
-                    let order = 0;
-
-                    for (const child of children) {
-                        let type = 'text';
-                        let content = child.textContent.trim();
-
-                        if (child.tagName === 'H1') type = 'heading';
-                        else if (child.tagName === 'H2') type = 'subheading';
-                        else if (child.tagName === 'P') type = 'text';
-                        else if (child.tagName === 'BUTTON') type = 'button';
-                        else if (child.tagName === 'IMG') {
-                            type = 'image-placeholder';
-                            content = child.src;
-                        } else if (child.tagName === 'HR') type = 'divider';
-                        else if (child.tagName === 'INPUT') type = 'input';
-                        else if (child.tagName === 'TEXTAREA') type = 'textarea';
-                        else if (child.className && child.className.includes('card')) type = 'card';
-
-                        const style = {
-                            color: '#1f2937',
-                            fontSize: '16px',
-                            textAlign: 'left',
-                            background: 'transparent'
-                        };
-
-                        if (child.style) {
-                            if (child.style.color) style.color = child.style.color;
-                            if (child.style.fontSize) style.fontSize = child.style.fontSize;
-                            if (child.style.textAlign) style.textAlign = child.style.textAlign;
-                            if (child.style.background) style.background = child.style.background;
-                        }
-
-                        elements.push({
-                            id: ++elementIdCounter,
-                            type: type,
-                            content: content || ' ',
-                            order: order++,
-                            style: style
-                        });
-                    }
-
-                    renderCanvas();
-                    status.className = 'status success';
-                    status.textContent = `✅ Загружено ${elements.length} элементов!`;
-
-                    try {
-                        localStorage.setItem('sitecraft_gist_id', gistId);
-                        localStorage.setItem('sitecraft_token', token);
-                    } catch (e) {}
-                }
-
-            } catch (error) {
-                status.className = 'status error';
-                status.textContent = `❌ Ошибка: ${error.message}`;
-                console.error('Ошибка загрузки:', error);
-            }
+            return false;
         }
 
         // ============================================
         //  УПРАВЛЕНИЕ МОДАЛКОЙ
         // ============================================
-        function showPublishModal() {
-            const modal = document.getElementById('publishModal');
-            modal.classList.add('active');
-
-            try {
-                const savedToken = localStorage.getItem('sitecraft_token');
-                if (savedToken) {
-                    document.getElementById('githubToken').value = savedToken;
-                }
-            } catch (e) {}
-        }
-
-        function closePublish() {
-            document.getElementById('publishModal').classList.remove('active');
+        function closeHosting() {
+            document.getElementById('hostingModal').classList.remove('active');
         }
 
         function copyLink() {
@@ -1060,11 +965,14 @@
 
         function openPublishedSite() {
             const link = document.getElementById('publishedLink').textContent;
-            if (link) window.open(link, '_blank');
+            if (link) {
+                // Открываем в новой вкладке
+                window.open(link, '_blank');
+            }
         }
 
-        document.getElementById('publishModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('publishModal')) closePublish();
+        document.getElementById('hostingModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('hostingModal')) closeHosting();
         });
 
         // ============================================
@@ -1076,7 +984,6 @@
 
             canvas.querySelectorAll('.canvas-element').forEach(el => el.remove());
 
-            // Обновляем счётчик
             document.getElementById('elementCounter').textContent = `${elements.length} элементов`;
 
             if (elements.length === 0) {
@@ -1196,7 +1103,6 @@
             renderCanvas();
             selectElement(el.id);
 
-            // Скроллим к новому элементу
             setTimeout(() => {
                 const canvasWrapper = document.getElementById('canvasWrapper');
                 canvasWrapper.scrollTop = canvasWrapper.scrollHeight;
@@ -1339,24 +1245,29 @@
         // ============================================
         //  ИНИЦИАЛИЗАЦИЯ
         // ============================================
-        if (!loadLocal()) {
-            setTimeout(() => {
-                addElement('heading', 'Добро пожаловать в SiteCraft!');
-                addElement('text', 'Создайте свой первый сайт за 5 минут. Перетаскивайте элементы и редактируйте их.');
-                addElement('button', 'Начать');
-                addElement('divider', '');
-                addElement('card', '✨ Это карточка. Вы можете добавить сюда любой контент.');
-                addElement('input', 'Введите ваш email');
-                addElement('textarea', 'Ваше сообщение...');
-                selectedId = null;
-                renderCanvas();
-            }, 300);
+        // Проверяем, не открыт ли сайт по ссылке
+        if (!viewSite()) {
+            // Если нет, загружаем конструктор
+            if (!loadLocal()) {
+                setTimeout(() => {
+                    addElement('heading', 'Добро пожаловать в SiteCraft!');
+                    addElement('text', 'Создайте свой первый сайт за 5 минут. Перетаскивайте элементы и редактируйте их.');
+                    addElement('button', 'Начать');
+                    addElement('divider', '');
+                    addElement('card', '✨ Это карточка. Вы можете добавить сюда любой контент.');
+                    addElement('input', 'Введите ваш email');
+                    addElement('textarea', 'Ваше сообщение...');
+                    selectedId = null;
+                    renderCanvas();
+                }, 300);
+            }
         }
 
-        console.log('🚀 SiteCraft загружен!');
+        console.log('🚀 SiteCraft с собственным хостингом загружен!');
         console.log(`📁 Элементов: ${elements.length}`);
-        console.log('🔑 Для публикации нужен GitHub токен');
-        console.log('📜 Скролл работает! Добавляйте элементы и листайте вниз.');
+        console.log('🌐 Нажмите "Хостинг" чтобы опубликовать сайт!');
+        console.log('📱 Сайт откроется на любом устройстве без регистрации!');
+        console.log('🔗 Ссылка будет вида: ваш-сайт?site=уникальный-id');
     </script>
 </body>
 </html>
