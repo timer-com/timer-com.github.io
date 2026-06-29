@@ -270,6 +270,9 @@
             cursor: pointer;
             border: none;
         }
+        .canvas-element[data-type="button"]:hover {
+            background: #388bfd;
+        }
         .canvas-element[data-type="image-placeholder"] {
             background: #f3f4f6;
             padding: 40px;
@@ -385,6 +388,31 @@
             padding: 2px;
             border-radius: 6px;
             cursor: pointer;
+        }
+
+        .prop-group .link-input {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .prop-group .link-input input {
+            flex: 1;
+        }
+
+        .prop-group .link-input .btn-small {
+            padding: 8px 12px;
+            background: #21262d;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            color: #e6edf3;
+            cursor: pointer;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .prop-group .link-input .btn-small:hover {
+            background: #30363d;
         }
 
         /* Модалка хостинга */
@@ -547,6 +575,16 @@
             margin-left: 10px;
         }
 
+        .type-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            background: #21262d;
+            color: #8b949e;
+            margin-left: 8px;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 width: 200px;
@@ -647,7 +685,7 @@
                 <div class="element-item" draggable="true" data-type="text" data-content="Текст абзаца...">
                     <span class="icon">📄</span> Текст
                 </div>
-                <div class="element-item" draggable="true" data-type="button" data-content="Кнопка">
+                <div class="element-item" draggable="true" data-type="button" data-content="Кнопка" data-link="https://example.com">
                     <span class="icon">🔘</span> Кнопка
                 </div>
                 <div class="element-item" draggable="true" data-type="image-placeholder" data-content="https://via.placeholder.com/600x300">
@@ -683,6 +721,16 @@
             <div class="prop-group">
                 <label>Текст</label>
                 <input type="text" id="propText" onchange="updateSelectedElement('text', this.value)">
+            </div>
+            <div class="prop-group" id="linkGroup" style="display:none;">
+                <label>🔗 Ссылка (для кнопки)</label>
+                <div class="link-input">
+                    <input type="url" id="propLink" placeholder="https://example.com" onchange="updateSelectedElement('link', this.value)">
+                    <button class="btn-small" onclick="document.getElementById('propLink').value='https://'; updateSelectedElement('link', document.getElementById('propLink').value);">🔄</button>
+                </div>
+                <div style="font-size:12px; color:#8b949e; margin-top:4px;">
+                    💡 Введите URL, куда будет вести кнопка
+                </div>
             </div>
             <div class="prop-group">
                 <label>Цвет текста</label>
@@ -743,7 +791,7 @@
 
             <div style="margin: 15px 0;">
                 <p style="color:#8b949e; font-size:14px; margin-bottom:8px;">👁️ Предпросмотр сайта:</p>
-                <iframe id="previewFrame" class="preview-frame" sandbox="allow-scripts allow-modals"></iframe>
+                <iframe id="previewFrame" class="preview-frame" sandbox="allow-scripts allow-modals allow-same-origin"></iframe>
             </div>
 
             <div class="status" id="publishStatus"></div>
@@ -804,7 +852,9 @@
                     case 'text':
                         return `<p${styleAttr}>${el.content}</p>`;
                     case 'button':
-                        return `<button style="background:#1f6feb;color:white;padding:12px 30px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">${el.content}</button>`;
+                        const link = el.link || '#';
+                        const target = link.startsWith('http') ? ' target="_blank"' : '';
+                        return `<a href="${link}"${target} style="text-decoration:none;"><button style="background:#1f6feb;color:white;padding:12px 30px;border:none;border-radius:8px;font-weight:600;cursor:pointer;${style}">${el.content}</button></a>`;
                     case 'image-placeholder':
                         return `<img src="${el.content}" alt="Image" style="max-width:100%;border-radius:8px;">`;
                     case 'divider':
@@ -838,6 +888,7 @@
                 img { max-width: 100%; }
                 button { cursor: pointer; }
                 input, textarea { font-family: inherit; }
+                a { text-decoration: none; }
             </style>
         </head>
         <body>
@@ -861,10 +912,10 @@
 
             try {
                 const html = generateHTML();
-                
+
                 // Генерируем уникальный ID
                 siteId = 'site_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 6);
-                
+
                 // Сохраняем в localStorage (это наш "хостинг")
                 const sites = JSON.parse(localStorage.getItem('sitecraft_hosted') || '{}');
                 sites[siteId] = {
@@ -877,9 +928,8 @@
                 localStorage.setItem('sitecraft_current_site', siteId);
 
                 // Формируем ссылку для просмотра
-                // Используем текущую страницу как просмотрщик
                 publishedUrl = window.location.origin + window.location.pathname + '?site=' + siteId;
-                
+
                 // Сохраняем для просмотра
                 localStorage.setItem('sitecraft_published_url', publishedUrl);
                 localStorage.setItem('sitecraft_published_id', siteId);
@@ -916,18 +966,18 @@
         function viewSite() {
             const params = new URLSearchParams(window.location.search);
             const siteId = params.get('site');
-            
+
             if (siteId) {
                 try {
                     const sites = JSON.parse(localStorage.getItem('sitecraft_hosted') || '{}');
                     const site = sites[siteId];
-                    
+
                     if (site) {
                         // Увеличиваем счётчик просмотров
                         site.views = (site.views || 0) + 1;
                         sites[siteId] = site;
                         localStorage.setItem('sitecraft_hosted', JSON.stringify(sites));
-                        
+
                         // Показываем сайт
                         document.body.innerHTML = site.html;
                         document.title = 'Сайт на SiteCraft';
@@ -966,7 +1016,6 @@
         function openPublishedSite() {
             const link = document.getElementById('publishedLink').textContent;
             if (link) {
-                // Открываем в новой вкладке
                 window.open(link, '_blank');
             }
         }
@@ -1021,6 +1070,15 @@
                     }
                 }
 
+                // Для кнопки показываем ссылку
+                if (el.type === 'button' && el.link) {
+                    const linkLabel = document.createElement('div');
+                    linkLabel.style.cssText =
+                        'font-size:11px; color:#8b949e; margin-top:4px; font-family:monospace;';
+                    linkLabel.textContent = `🔗 ${el.link}`;
+                    div.appendChild(linkLabel);
+                }
+
                 div.draggable = true;
                 div.addEventListener('dragstart', (e) => {
                     e.dataTransfer.setData('text/plain', el.id);
@@ -1049,6 +1107,15 @@
                     document.getElementById('propSize').value = el.style?.fontSize ? parseInt(el.style.fontSize) : 16;
                     document.getElementById('propAlign').value = el.style?.textAlign || 'left';
                     document.getElementById('propBg').value = el.style?.background || '#ffffff';
+
+                    // Показываем/скрываем поле ссылки
+                    const linkGroup = document.getElementById('linkGroup');
+                    if (el.type === 'button') {
+                        linkGroup.style.display = 'block';
+                        document.getElementById('propLink').value = el.link || '';
+                    } else {
+                        linkGroup.style.display = 'none';
+                    }
                 }
             } else {
                 document.getElementById('propertiesPanel').classList.remove('active');
@@ -1067,7 +1134,8 @@
                 case 'text':
                     return `<p>${content}</p>`;
                 case 'button':
-                    return `<button style="background:#1f6feb;color:white;padding:12px 30px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">${content}</button>`;
+                    const link = el.link || '#';
+                    return `<a href="${link}" target="_blank" style="text-decoration:none;"><button style="background:#1f6feb;color:white;padding:12px 30px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">${content}</button></a>`;
                 case 'image-placeholder':
                     return `<img src="${content}" alt="Изображение" style="max-width:100%;border-radius:8px;">`;
                 case 'divider':
@@ -1086,7 +1154,7 @@
         // ============================================
         //  УПРАВЛЕНИЕ ЭЛЕМЕНТАМИ
         // ============================================
-        function addElement(type, content, order) {
+        function addElement(type, content, order, link) {
             const el = {
                 id: ++elementIdCounter,
                 type: type,
@@ -1099,6 +1167,12 @@
                     background: 'transparent'
                 }
             };
+
+            // Добавляем ссылку для кнопки
+            if (type === 'button' && link) {
+                el.link = link;
+            }
+
             elements.push(el);
             renderCanvas();
             selectElement(el.id);
@@ -1131,6 +1205,10 @@
 
             if (prop === 'text') {
                 el.content = value;
+            } else if (prop === 'link') {
+                el.link = value;
+                renderCanvas();
+                return;
             } else if (prop === 'color') {
                 if (!el.style) el.style = {};
                 el.style.color = value;
@@ -1198,7 +1276,8 @@
             item.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('text/plain', JSON.stringify({
                     type: item.dataset.type,
-                    content: item.dataset.content
+                    content: item.dataset.content,
+                    link: item.dataset.link || ''
                 }));
                 e.dataTransfer.effectAllowed = 'copy';
             });
@@ -1215,7 +1294,7 @@
             if (!data) return;
             try {
                 const parsed = JSON.parse(data);
-                addElement(parsed.type, parsed.content);
+                addElement(parsed.type, parsed.content, undefined, parsed.link);
             } catch (err) {}
         });
 
@@ -1252,7 +1331,7 @@
                 setTimeout(() => {
                     addElement('heading', 'Добро пожаловать в SiteCraft!');
                     addElement('text', 'Создайте свой первый сайт за 5 минут. Перетаскивайте элементы и редактируйте их.');
-                    addElement('button', 'Начать');
+                    addElement('button', 'Начать', undefined, 'https://example.com');
                     addElement('divider', '');
                     addElement('card', '✨ Это карточка. Вы можете добавить сюда любой контент.');
                     addElement('input', 'Введите ваш email');
@@ -1267,7 +1346,7 @@
         console.log(`📁 Элементов: ${elements.length}`);
         console.log('🌐 Нажмите "Хостинг" чтобы опубликовать сайт!');
         console.log('📱 Сайт откроется на любом устройстве без регистрации!');
-        console.log('🔗 Ссылка будет вида: ваш-сайт?site=уникальный-id');
+        console.log('🔗 У кнопок можно указать ссылку в панели свойств!');
     </script>
 </body>
 </html>
