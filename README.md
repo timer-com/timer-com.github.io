@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SiteCraft — Конструктор + Хостинг</title>
+    <title>SiteCraft PRO — Конструктор сайтов</title>
     <style>
         * {
             margin: 0;
@@ -21,15 +21,56 @@
             flex-direction: column;
         }
 
+        /* Режим просмотра сайта (скрываем всё лишнее) */
+        body.view-mode .topbar {
+            display: none !important;
+        }
+        body.view-mode .sidebar {
+            display: none !important;
+        }
+        body.view-mode .properties-panel {
+            display: none !important;
+        }
+        body.view-mode .canvas-wrapper {
+            padding: 0 !important;
+            background: #ffffff !important;
+        }
+        body.view-mode .canvas {
+            box-shadow: none !important;
+            border-radius: 0 !important;
+            min-height: 100vh !important;
+            padding: 40px 50px !important;
+            margin: 0 !important;
+            max-width: 100% !important;
+        }
+        body.view-mode .canvas .empty-state {
+            display: none !important;
+        }
+        body.view-mode .canvas-element {
+            cursor: default !important;
+        }
+        body.view-mode .canvas-element:hover {
+            border-color: transparent !important;
+            background: transparent !important;
+        }
+        body.view-mode .canvas-element .delete-btn {
+            display: none !important;
+        }
+        body.view-mode .canvas-element.selected {
+            border-color: transparent !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+
         .topbar {
             background: #161b22;
             border-bottom: 1px solid #30363d;
-            padding: 12px 20px;
+            padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             z-index: 10;
             flex-shrink: 0;
         }
@@ -38,7 +79,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 700;
             background: linear-gradient(135deg, #58a6ff, #3fb950);
             -webkit-background-clip: text;
@@ -47,16 +88,16 @@
 
         .topbar .actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .btn {
-            padding: 8px 20px;
+            padding: 6px 16px;
             border: none;
             border-radius: 6px;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 13px;
             cursor: pointer;
             transition: all 0.2s;
         }
@@ -112,37 +153,52 @@
         }
 
         .sidebar {
-            width: 260px;
+            width: 280px;
             background: #161b22;
             border-right: 1px solid #30363d;
-            padding: 15px;
+            padding: 12px;
             overflow-y: auto;
             flex-shrink: 0;
         }
 
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: #0d1117;
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 3px;
+        }
+
         .sidebar h3 {
-            font-size: 14px;
+            font-size: 11px;
             color: #8b949e;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 12px;
+            margin: 10px 0 6px;
+        }
+
+        .sidebar h3:first-child {
+            margin-top: 0;
         }
 
         .element-list {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 5px;
         }
 
         .element-item {
             background: #0d1117;
             border: 1px solid #30363d;
-            border-radius: 8px;
-            padding: 12px 8px;
+            border-radius: 6px;
+            padding: 8px 4px;
             text-align: center;
             cursor: grab;
             transition: all 0.2s;
-            font-size: 13px;
+            font-size: 11px;
             user-select: none;
         }
 
@@ -153,9 +209,9 @@
         }
 
         .element-item .icon {
-            font-size: 28px;
+            font-size: 20px;
             display: block;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .canvas-wrapper {
@@ -188,7 +244,7 @@
             border-radius: 12px;
             box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
             min-height: 600px;
-            padding: 40px 50px;
+            padding: 30px 40px;
             position: relative;
             transition: all 0.2s;
         }
@@ -196,20 +252,20 @@
         .canvas .empty-state {
             text-align: center;
             color: #9ca3af;
-            padding: 80px 20px;
-            font-size: 18px;
+            padding: 60px 20px;
+            font-size: 16px;
         }
 
         .canvas .empty-state .big {
-            font-size: 64px;
+            font-size: 48px;
             display: block;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .canvas-element {
             position: relative;
-            margin: 8px 0;
-            padding: 8px 12px;
+            margin: 6px 0;
+            padding: 6px 10px;
             border-radius: 6px;
             border: 2px solid transparent;
             transition: all 0.15s;
@@ -229,25 +285,27 @@
 
         .canvas-element .delete-btn {
             position: absolute;
-            top: -10px;
-            right: -10px;
+            top: -8px;
+            right: -8px;
             background: #da3633;
             color: white;
             border: none;
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            font-size: 14px;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
             cursor: pointer;
             display: none;
             align-items: center;
             justify-content: center;
+            line-height: 1;
         }
 
         .canvas-element:hover .delete-btn {
             display: flex;
         }
 
+        /* Стили элементов */
         .canvas-element[data-type="heading"] {
             font-size: 32px;
             font-weight: 700;
@@ -260,19 +318,41 @@
             font-size: 16px;
             line-height: 1.6;
         }
+        .canvas-element[data-type="small-text"] {
+            font-size: 13px;
+            line-height: 1.5;
+            color: #6b7280;
+        }
         .canvas-element[data-type="button"] {
             display: inline-block;
             background: #1f6feb;
             color: white !important;
-            padding: 12px 30px;
+            padding: 10px 28px;
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             border: none;
         }
+        .canvas-element[data-type="button"]:hover {
+            background: #388bfd;
+        }
+        .canvas-element[data-type="button-outline"] {
+            display: inline-block;
+            background: transparent;
+            color: #1f6feb !important;
+            padding: 10px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid #1f6feb;
+        }
+        .canvas-element[data-type="button-outline"]:hover {
+            background: #1f6feb;
+            color: white !important;
+        }
         .canvas-element[data-type="image-placeholder"] {
             background: #f3f4f6;
-            padding: 40px;
+            padding: 30px;
             text-align: center;
             border: 2px dashed #d1d5db;
             border-radius: 8px;
@@ -287,11 +367,25 @@
             border-top: 2px solid #e5e7eb;
             padding: 0;
             height: 2px;
-            margin: 20px 0;
+            margin: 15px 0;
+        }
+        .canvas-element[data-type="divider-dashed"] {
+            border: none;
+            border-top: 2px dashed #e5e7eb;
+            padding: 0;
+            height: 2px;
+            margin: 15px 0;
+        }
+        .canvas-element[data-type="divider-dotted"] {
+            border: none;
+            border-top: 2px dotted #e5e7eb;
+            padding: 0;
+            height: 2px;
+            margin: 15px 0;
         }
         .canvas-element[data-type="input"] input {
             width: 100%;
-            padding: 12px 16px;
+            padding: 10px 14px;
             border: 2px solid #d1d5db;
             border-radius: 8px;
             font-size: 16px;
@@ -302,11 +396,11 @@
         }
         .canvas-element[data-type="textarea"] textarea {
             width: 100%;
-            padding: 12px 16px;
+            padding: 10px 14px;
             border: 2px solid #d1d5db;
             border-radius: 8px;
             font-size: 16px;
-            min-height: 100px;
+            min-height: 80px;
             resize: vertical;
             font-family: inherit;
         }
@@ -319,6 +413,254 @@
             border: 1px solid #e5e7eb;
             padding: 20px;
             border-radius: 12px;
+        }
+        .canvas-element[data-type="card-shadow"] {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        .canvas-element[data-type="card-colored"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white !important;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        .canvas-element[data-type="list"] ul {
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+        .canvas-element[data-type="list"] ul li {
+            list-style-type: disc;
+        }
+        .canvas-element[data-type="list-number"] ol {
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+        .canvas-element[data-type="list-number"] ol li {
+            list-style-type: decimal;
+        }
+        .canvas-element[data-type="quote"] {
+            background: #f3f4f6;
+            border-left: 4px solid #1f6feb;
+            padding: 15px 20px;
+            border-radius: 4px;
+            font-style: italic;
+            font-size: 18px;
+            color: #374151;
+        }
+        .canvas-element[data-type="badge"] {
+            display: inline-block;
+            background: #1f6feb;
+            color: white !important;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .canvas-element[data-type="badge-success"] {
+            display: inline-block;
+            background: #238636;
+            color: white !important;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .canvas-element[data-type="badge-danger"] {
+            display: inline-block;
+            background: #da3633;
+            color: white !important;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .canvas-element[data-type="badge-warning"] {
+            display: inline-block;
+            background: #d29922;
+            color: #0a0e17 !important;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .canvas-element[data-type="progress"] {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .canvas-element[data-type="progress"] .fill {
+            height: 100%;
+            background: #1f6feb;
+            border-radius: 4px;
+            width: 70%;
+        }
+        .canvas-element[data-type="progress-success"] {
+            width: 100%;
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .canvas-element[data-type="progress-success"] .fill {
+            height: 100%;
+            background: #238636;
+            border-radius: 4px;
+            width: 45%;
+        }
+        .canvas-element[data-type="alert"] {
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            background: #f3f4f6;
+        }
+        .canvas-element[data-type="alert-success"] {
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #238636;
+            background: rgba(35, 134, 54, 0.1);
+            color: #238636;
+        }
+        .canvas-element[data-type="alert-danger"] {
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #da3633;
+            background: rgba(218, 54, 51, 0.1);
+            color: #da3633;
+        }
+        .canvas-element[data-type="alert-warning"] {
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid #d29922;
+            background: rgba(210, 153, 34, 0.1);
+            color: #d29922;
+        }
+        .canvas-element[data-type="table"] table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .canvas-element[data-type="table"] th {
+            background: #f3f4f6;
+            padding: 10px 12px;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+            font-weight: 600;
+        }
+        .canvas-element[data-type="table"] td {
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+        }
+        .canvas-element[data-type="video"] {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            background: #0a0e17;
+        }
+        .canvas-element[data-type="video"] iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .canvas-element[data-type="gallery"] {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+        .canvas-element[data-type="gallery"] img {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+        .canvas-element[data-type="checkbox"] {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .canvas-element[data-type="checkbox"] input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #1f6feb;
+        }
+        .canvas-element[data-type="radio"] {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .canvas-element[data-type="radio"] input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #1f6feb;
+        }
+        .canvas-element[data-type="select"] select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            background: white;
+        }
+        .canvas-element[data-type="select"] select:focus {
+            outline: none;
+            border-color: #1f6feb;
+        }
+        .canvas-element[data-type="date"] input[type="date"] {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .canvas-element[data-type="date"] input[type="date"]:focus {
+            outline: none;
+            border-color: #1f6feb;
+        }
+        .canvas-element[data-type="color"] input[type="color"] {
+            width: 50px;
+            height: 50px;
+            padding: 2px;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .canvas-element[data-type="range"] input[type="range"] {
+            width: 100%;
+            accent-color: #1f6feb;
+        }
+        .canvas-element[data-type="tag"] {
+            display: inline-block;
+            background: #e5e7eb;
+            color: #1f2937;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            margin: 2px;
+        }
+        .canvas-element[data-type="tag-blue"] {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1f6feb;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            margin: 2px;
+        }
+        .canvas-element[data-type="tag-green"] {
+            display: inline-block;
+            background: #d1fae5;
+            color: #238636;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            margin: 2px;
         }
 
         .properties-panel {
@@ -343,7 +685,7 @@
         }
 
         .prop-group {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
 
         .prop-group label {
@@ -387,155 +729,29 @@
             cursor: pointer;
         }
 
-        /* Модалка хостинга */
-        .hosting-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .hosting-modal.active {
+        .prop-group .link-input {
             display: flex;
-        }
-
-        .hosting-modal .content {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 16px;
-            max-width: 700px;
-            width: 100%;
-            padding: 35px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .hosting-modal .content h2 {
-            margin-bottom: 10px;
-            font-size: 28px;
-            display: flex;
+            gap: 8px;
             align-items: center;
-            gap: 10px;
         }
 
-        .hosting-modal .content .sub {
-            color: #8b949e;
-            margin-bottom: 20px;
+        .prop-group .link-input input {
+            flex: 1;
         }
 
-        .hosting-modal .content .url-box {
-            background: #0d1117;
-            padding: 15px 20px;
-            border-radius: 8px;
-            margin: 10px 0;
-            word-break: break-all;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            color: #58a6ff;
-            border: 1px solid #30363d;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .hosting-modal .content .url-box .copy-btn {
+        .prop-group .link-input .btn-small {
+            padding: 8px 12px;
             background: #21262d;
-            border: none;
+            border: 1px solid #30363d;
+            border-radius: 6px;
             color: #e6edf3;
-            padding: 6px 12px;
-            border-radius: 4px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             white-space: nowrap;
         }
 
-        .hosting-modal .content .url-box .copy-btn:hover {
+        .prop-group .link-input .btn-small:hover {
             background: #30363d;
-        }
-
-        .hosting-modal .content .status {
-            padding: 12px;
-            border-radius: 8px;
-            margin: 10px 0;
-            display: none;
-        }
-
-        .hosting-modal .content .status.success {
-            display: block;
-            background: rgba(35, 134, 54, 0.2);
-            border: 1px solid #238636;
-            color: #3fb950;
-        }
-
-        .hosting-modal .content .status.error {
-            display: block;
-            background: rgba(218, 54, 51, 0.2);
-            border: 1px solid #da3633;
-            color: #f85149;
-        }
-
-        .hosting-modal .content .status.loading {
-            display: block;
-            background: rgba(88, 166, 255, 0.1);
-            border: 1px solid #58a6ff;
-            color: #58a6ff;
-        }
-
-        .hosting-modal .content .preview-frame {
-            width: 100%;
-            height: 300px;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            background: white;
-            margin: 15px 0;
-        }
-
-        .hosting-modal .content .btn {
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .hosting-modal .content .view-btn {
-            background: #1f6feb;
-            color: white;
-        }
-        .hosting-modal .content .view-btn:hover {
-            background: #388bfd;
-        }
-
-        .hosting-modal .content .stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .hosting-modal .content .stats .stat {
-            background: #0d1117;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #30363d;
-        }
-
-        .hosting-modal .content .stats .stat .num {
-            font-size: 24px;
-            font-weight: 700;
-            color: #58a6ff;
-        }
-
-        .hosting-modal .content .stats .stat .label {
-            font-size: 12px;
-            color: #8b949e;
-            margin-top: 4px;
         }
 
         .element-counter {
@@ -545,6 +761,55 @@
             font-size: 13px;
             color: #8b949e;
             margin-left: 10px;
+        }
+
+        /* Модалка для просмотра сайта */
+        .view-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #ffffff;
+            z-index: 9999;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        .view-modal.active {
+            display: block;
+        }
+
+        .view-modal .close-view {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #161b22;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .view-modal .close-view:hover {
+            background: #30363d;
+        }
+
+        .view-modal .site-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            color: #1f2937;
         }
 
         @media (max-width: 768px) {
@@ -558,10 +823,7 @@
                 padding: 20px;
             }
             .element-list {
-                grid-template-columns: 1fr;
-            }
-            .hosting-modal .content .stats {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
             }
         }
 
@@ -573,7 +835,7 @@
                 width: 100%;
                 border-right: none;
                 border-bottom: 1px solid #30363d;
-                max-height: 180px;
+                max-height: 200px;
             }
             .properties-panel {
                 width: 100%;
@@ -581,15 +843,21 @@
                 border-top: 1px solid #30363d;
             }
             .topbar .actions .btn {
-                font-size: 12px;
-                padding: 6px 12px;
+                font-size: 11px;
+                padding: 5px 10px;
             }
-            .hosting-modal .content {
-                padding: 20px;
+            .element-list {
+                grid-template-columns: 1fr 1fr 1fr;
             }
-            .hosting-modal .content .url-box {
-                font-size: 14px;
-                flex-wrap: wrap;
+            .view-modal {
+                padding: 20px 10px;
+            }
+            .view-modal .close-view {
+                top: 10px;
+                right: 10px;
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
             }
         }
 
@@ -625,45 +893,182 @@
 </head>
 <body>
     <div class="topbar">
-        <div class="logo">🚀 SiteCraft</div>
+        <div class="logo">🚀 SiteCraft PRO</div>
         <div class="actions">
             <span class="element-counter" id="elementCounter">0 элементов</span>
             <button class="btn btn-outline" onclick="clearCanvas()">🗑 Очистить</button>
             <button class="btn btn-publish" onclick="publishSite()">🌐 Хостинг</button>
-            <button class="btn btn-success" onclick="exportHTML()">💾 Скачать HTML</button>
+            <button class="btn btn-success" onclick="exportHTML()">💾 Скачать</button>
         </div>
     </div>
 
     <div class="main">
         <div class="sidebar">
-            <h3>📦 Элементы</h3>
+            <h3>📝 Текст</h3>
             <div class="element-list">
                 <div class="element-item" draggable="true" data-type="heading" data-content="Заголовок H1">
-                    <span class="icon">📰</span> Заголовок
+                    <span class="icon">📰</span> H1
                 </div>
                 <div class="element-item" draggable="true" data-type="subheading" data-content="Подзаголовок H2">
-                    <span class="icon">📝</span> Подзаголовок
+                    <span class="icon">📝</span> H2
                 </div>
                 <div class="element-item" draggable="true" data-type="text" data-content="Текст абзаца...">
                     <span class="icon">📄</span> Текст
                 </div>
-                <div class="element-item" draggable="true" data-type="button" data-content="Кнопка">
-                    <span class="icon">🔘</span> Кнопка
+                <div class="element-item" draggable="true" data-type="small-text" data-content="Маленький текст...">
+                    <span class="icon">🔤</span> Мелкий
                 </div>
+                <div class="element-item" draggable="true" data-type="quote" data-content="Цитата">
+                    <span class="icon">💬</span> Цитата
+                </div>
+            </div>
+
+            <h3>🔘 Кнопки</h3>
+            <div class="element-list">
+                <div class="element-item" draggable="true" data-type="button" data-content="Кнопка" data-link="https://example.com">
+                    <span class="icon">🔵</span> Кнопка
+                </div>
+                <div class="element-item" draggable="true" data-type="button-outline" data-content="Кнопка" data-link="#">
+                    <span class="icon">⬜</span> Обводка
+                </div>
+            </div>
+
+            <h3>🏷️ Бейджи</h3>
+            <div class="element-list">
+                <div class="element-item" draggable="true" data-type="badge" data-content="Новинка">
+                    <span class="icon">🔵</span> Бейдж
+                </div>
+                <div class="element-item" draggable="true" data-type="badge-success" data-content="Успешно">
+                    <span class="icon">🟢</span> Успех
+                </div>
+                <div class="element-item" draggable="true" data-type="badge-danger" data-content="Ошибка">
+                    <span class="icon">🔴</span> Ошибка
+                </div>
+                <div class="element-item" draggable="true" data-type="badge-warning" data-content="Внимание">
+                    <span class="icon">🟡</span> Внимание
+                </div>
+            </div>
+
+            <h3>📦 Контейнеры</h3>
+            <div class="element-list">
+                <div class="element-item" draggable="true" data-type="card" data-content="Карточка">
+                    <span class="icon">📇</span> Карточка
+                </div>
+                <div class="element-item" draggable="true" data-type="card-shadow" data-content="С тенью">
+                    <span class="icon">🌓</span> Тень
+                </div>
+                <div class="element-item" draggable="true" data-type="card-colored" data-content="Цветная">
+                    <span class="icon">🌈</span> Цветная
+                </div>
+            </div>
+
+            <h3>📋 Списки</h3>
+            <div class="element-list">
+                <div class="element-item" draggable="true" data-type="list" data-content="Пункт 1\nПункт 2\nПункт 3">
+                    <span class="icon">•</span> Маркер
+                </div>
+                <div class="element-item" draggable="true" data-type="list-number" data-content="1. Первый\n2. Второй\n3. Третий">
+                    <span class="icon">1.</span> Нумер.
+                </div>
+            </div>
+
+            <h3>⚡ Прогресс</h3>
+            <div class="element-list">
+                <div class="element-item" draggable="true" data-type="progress" data-content="">
+                    <span class="icon">📊</span> Прогресс
+                </div>
+                <div class="element-item" draggable="true" data-type="progress-success" data-content="">
+                    <span class="icon">✅</span> Успех
+                </div>
+            </div>
+
+            <h3>⚠️ Алerts</h3>
+            <div class="element-list">
+                <div class="element-item" draggable="true" data-type="alert" data-content="Информация">
+                    <span class="icon">ℹ️</span> Инфо
+                </div>
+                <div class="element-item" draggable="true" data-type="alert-success" data-content="Успешно!">
+                    <span class="icon">✅</span> Успех
+                </div>
+                <div class="element-item" draggable="true" data-type="alert-danger" data-content="Ошибка!">
+                    <span class="icon">❌</span> Ошибка
+                </div>
+                <div class="element-item" draggable="true" data-type="alert-warning" data-content="Внимание!">
+                    <span class="icon">⚠️</span> Внимание
+                </div>
+            </div>
+
+            <h3>🖼️ Медиа</h3>
+            <div class="element-list">
                 <div class="element-item" draggable="true" data-type="image-placeholder" data-content="https://via.placeholder.com/600x300">
                     <span class="icon">🖼️</span> Картинка
                 </div>
-                <div class="element-item" draggable="true" data-type="divider" data-content="">
-                    <span class="icon">➖</span> Разделитель
+                <div class="element-item" draggable="true" data-type="video" data-content="https://www.youtube.com/embed/dQw4w9WgXcQ">
+                    <span class="icon">▶️</span> Видео
                 </div>
+                <div class="element-item" draggable="true" data-type="gallery" data-content="https://via.placeholder.com/150/1f6feb/fff">
+                    <span class="icon">🖼️</span> Галерея
+                </div>
+            </div>
+
+            <h3>➖ Разделители</h3>
+            <div class="element-list">
+                <div class="element-item" draggable="true" data-type="divider" data-content="">
+                    <span class="icon">➖</span> Сплошной
+                </div>
+                <div class="element-item" draggable="true" data-type="divider-dashed" data-content="">
+                    <span class="icon">╌</span> Пунктир
+                </div>
+                <div class="element-item" draggable="true" data-type="divider-dotted" data-content="">
+                    <span class="icon">┈</span> Точки
+                </div>
+            </div>
+
+            <h3>📊 Формы</h3>
+            <div class="element-list">
                 <div class="element-item" draggable="true" data-type="input" data-content="Введите текст...">
-                    <span class="icon">✏️</span> Поле ввода
+                    <span class="icon">✏️</span> Поле
                 </div>
                 <div class="element-item" draggable="true" data-type="textarea" data-content="Введите текст...">
-                    <span class="icon">📋</span> Текстовая область
+                    <span class="icon">📋</span> Текст
                 </div>
-                <div class="element-item" draggable="true" data-type="card" data-content="Карточка">
-                    <span class="icon">📇</span> Карточка
+                <div class="element-item" draggable="true" data-type="select" data-content="Выберите вариант">
+                    <span class="icon">📌</span> Выбор
+                </div>
+                <div class="element-item" draggable="true" data-type="date" data-content="">
+                    <span class="icon">📅</span> Дата
+                </div>
+                <div class="element-item" draggable="true" data-type="color" data-content="">
+                    <span class="icon">🎨</span> Цвет
+                </div>
+                <div class="element-item" draggable="true" data-type="range" data-content="">
+                    <span class="icon">🎚️</span> Слайдер
+                </div>
+                <div class="element-item" draggable="true" data-type="checkbox" data-content="Чекбокс">
+                    <span class="icon">☑️</span> Чекбокс
+                </div>
+                <div class="element-item" draggable="true" data-type="radio" data-content="Радио">
+                    <span class="icon">⭕</span> Радио
+                </div>
+            </div>
+
+            <h3>🏷️ Теги</h3>
+            <div class="element-list">
+                <div class="element-item" draggable="true" data-type="tag" data-content="Тег">
+                    <span class="icon">🏷️</span> Тег
+                </div>
+                <div class="element-item" draggable="true" data-type="tag-blue" data-content="Синий">
+                    <span class="icon">🔵</span> Синий
+                </div>
+                <div class="element-item" draggable="true" data-type="tag-green" data-content="Зеленый">
+                    <span class="icon">🟢</span> Зеленый
+                </div>
+            </div>
+
+            <h3>📊 Таблица</h3>
+            <div class="element-list">
+                <div class="element-item" draggable="true" data-type="table" data-content="Имя|Возраст\nАнна|25\nМакс|30">
+                    <span class="icon">📊</span> Таблица
                 </div>
             </div>
         </div>
@@ -683,6 +1088,13 @@
             <div class="prop-group">
                 <label>Текст</label>
                 <input type="text" id="propText" onchange="updateSelectedElement('text', this.value)">
+            </div>
+            <div class="prop-group" id="linkGroup" style="display:none;">
+                <label>🔗 Ссылка (для кнопки)</label>
+                <div class="link-input">
+                    <input type="url" id="propLink" placeholder="https://example.com" onchange="updateSelectedElement('link', this.value)">
+                    <button class="btn-small" onclick="document.getElementById('propLink').value='https://'; updateSelectedElement('link', document.getElementById('propLink').value);">🔄</button>
+                </div>
             </div>
             <div class="prop-group">
                 <label>Цвет текста</label>
@@ -715,56 +1127,10 @@
         </div>
     </div>
 
-    <!-- Модалка хостинга -->
-    <div class="hosting-modal" id="hostingModal">
-        <div class="content">
-            <h2>🌐 Ваш сайт в интернете!</h2>
-            <p class="sub">Сайт опубликован на нашем хостинге. Откройте ссылку с любого устройства!</p>
-
-            <div class="stats">
-                <div class="stat">
-                    <div class="num" id="viewCount">0</div>
-                    <div class="label">👁️ Просмотров</div>
-                </div>
-                <div class="stat">
-                    <div class="num" id="elementCount">0</div>
-                    <div class="label">📦 Элементов</div>
-                </div>
-                <div class="stat">
-                    <div class="num" id="siteAge">0 мин</div>
-                    <div class="label">⏳ Возраст</div>
-                </div>
-            </div>
-
-            <div class="url-box">
-                <span id="publishedLink">https://sitecraft.host/...</span>
-                <button class="copy-btn" onclick="copyLink()">📋 Копировать</button>
-            </div>
-
-            <div style="margin: 15px 0;">
-                <p style="color:#8b949e; font-size:14px; margin-bottom:8px;">👁️ Предпросмотр сайта:</p>
-                <iframe id="previewFrame" class="preview-frame" sandbox="allow-scripts allow-modals"></iframe>
-            </div>
-
-            <div class="status" id="publishStatus"></div>
-
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                <button class="btn view-btn" onclick="openPublishedSite()" style="flex:1;">🔗 Открыть сайт</button>
-                <button class="btn btn-outline" onclick="closeHosting()" style="flex:1;">✕ Закрыть</button>
-            </div>
-
-            <div style="margin-top:20px; padding-top:20px; border-top:1px solid #30363d;">
-                <p style="color:#8b949e; font-size:13px;">
-                    💡 Сайт хранится в облаке. Делитесь ссылкой с друзьями!
-                </p>
-                <p style="color:#8b949e; font-size:13px; margin-top:5px;">
-                    🔄 Нажмите "Хостинг" снова, чтобы обновить сайт.
-                </p>
-                <p style="color:#8b949e; font-size:13px; margin-top:5px;">
-                    📱 Открывается на любом устройстве без регистрации!
-                </p>
-            </div>
-        </div>
+    <!-- Модалка просмотра сайта -->
+    <div class="view-modal" id="viewModal">
+        <button class="close-view" onclick="closeViewMode()">✕</button>
+        <div class="site-content" id="viewContent"></div>
     </div>
 
     <script>
@@ -776,7 +1142,6 @@
         let elementIdCounter = 0;
         let publishedUrl = '';
         let siteId = '';
-        let viewCount = 0;
 
         // ============================================
         //  ГЕНЕРАЦИЯ HTML
@@ -803,18 +1168,112 @@
                         return `<h2${styleAttr}>${el.content}</h2>`;
                     case 'text':
                         return `<p${styleAttr}>${el.content}</p>`;
-                    case 'button':
-                        return `<button style="background:#1f6feb;color:white;padding:12px 30px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">${el.content}</button>`;
+                    case 'small-text':
+                        return `<p${styleAttr} style="font-size:13px;color:#6b7280;">${el.content}</p>`;
+                    case 'button': {
+                        const link = el.link || '#';
+                        const target = link.startsWith('http') ? ' target="_blank"' : '';
+                        return `<a href="${link}"${target} style="text-decoration:none;"><button style="background:#1f6feb;color:white;padding:10px 28px;border:none;border-radius:8px;font-weight:600;cursor:pointer;${style}">${el.content}</button></a>`;
+                    }
+                    case 'button-outline': {
+                        const link = el.link || '#';
+                        const target = link.startsWith('http') ? ' target="_blank"' : '';
+                        return `<a href="${link}"${target} style="text-decoration:none;"><button style="background:transparent;color:#1f6feb;padding:10px 28px;border:2px solid #1f6feb;border-radius:8px;font-weight:600;cursor:pointer;${style}">${el.content}</button></a>`;
+                    }
                     case 'image-placeholder':
                         return `<img src="${el.content}" alt="Image" style="max-width:100%;border-radius:8px;">`;
                     case 'divider':
-                        return `<hr style="border:none;border-top:2px solid #e5e7eb;margin:20px 0;">`;
+                        return `<hr style="border:none;border-top:2px solid #e5e7eb;margin:15px 0;">`;
+                    case 'divider-dashed':
+                        return `<hr style="border:none;border-top:2px dashed #e5e7eb;margin:15px 0;">`;
+                    case 'divider-dotted':
+                        return `<hr style="border:none;border-top:2px dotted #e5e7eb;margin:15px 0;">`;
                     case 'input':
-                        return `<input type="text" placeholder="${el.content}" style="width:100%;padding:12px 16px;border:2px solid #d1d5db;border-radius:8px;font-size:16px;">`;
+                        return `<input type="text" placeholder="${el.content}" style="width:100%;padding:10px 14px;border:2px solid #d1d5db;border-radius:8px;font-size:16px;">`;
                     case 'textarea':
-                        return `<textarea placeholder="${el.content}" style="width:100%;padding:12px 16px;border:2px solid #d1d5db;border-radius:8px;font-size:16px;min-height:100px;resize:vertical;font-family:inherit;"></textarea>`;
+                        return `<textarea placeholder="${el.content}" style="width:100%;padding:10px 14px;border:2px solid #d1d5db;border-radius:8px;font-size:16px;min-height:80px;resize:vertical;font-family:inherit;"></textarea>`;
                     case 'card':
                         return `<div style="background:#f9fafb;border:1px solid #e5e7eb;padding:20px;border-radius:12px;">${el.content}</div>`;
+                    case 'card-shadow':
+                        return `<div style="background:#ffffff;border:1px solid #e5e7eb;padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.08);">${el.content}</div>`;
+                    case 'card-colored':
+                        return `<div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:20px;border-radius:12px;">${el.content}</div>`;
+                    case 'list': {
+                        const items = el.content.split('\n').filter(s => s.trim());
+                        return `<ul style="padding-left:20px;line-height:1.8;">${items.map(i => `<li>${i}</li>`).join('')}</ul>`;
+                    }
+                    case 'list-number': {
+                        const items = el.content.split('\n').filter(s => s.trim());
+                        return `<ol style="padding-left:20px;line-height:1.8;">${items.map(i => `<li>${i}</li>`).join('')}</ol>`;
+                    }
+                    case 'quote':
+                        return `<blockquote style="background:#f3f4f6;border-left:4px solid #1f6feb;padding:15px 20px;border-radius:4px;font-style:italic;font-size:18px;color:#374151;">${el.content}</blockquote>`;
+                    case 'badge':
+                        return `<span style="display:inline-block;background:#1f6feb;color:white;padding:4px 14px;border-radius:20px;font-size:14px;font-weight:600;">${el.content}</span>`;
+                    case 'badge-success':
+                        return `<span style="display:inline-block;background:#238636;color:white;padding:4px 14px;border-radius:20px;font-size:14px;font-weight:600;">${el.content}</span>`;
+                    case 'badge-danger':
+                        return `<span style="display:inline-block;background:#da3633;color:white;padding:4px 14px;border-radius:20px;font-size:14px;font-weight:600;">${el.content}</span>`;
+                    case 'badge-warning':
+                        return `<span style="display:inline-block;background:#d29922;color:#0a0e17;padding:4px 14px;border-radius:20px;font-size:14px;font-weight:600;">${el.content}</span>`;
+                    case 'progress':
+                        return `<div style="width:100%;height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden;"><div style="height:100%;background:#1f6feb;border-radius:4px;width:70%;"></div></div>`;
+                    case 'progress-success':
+                        return `<div style="width:100%;height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden;"><div style="height:100%;background:#238636;border-radius:4px;width:45%;"></div></div>`;
+                    case 'alert':
+                        return `<div style="padding:12px 16px;border-radius:8px;border:1px solid #e5e7eb;background:#f3f4f6;">${el.content}</div>`;
+                    case 'alert-success':
+                        return `<div style="padding:12px 16px;border-radius:8px;border:1px solid #238636;background:rgba(35,134,54,0.1);color:#238636;">${el.content}</div>`;
+                    case 'alert-danger':
+                        return `<div style="padding:12px 16px;border-radius:8px;border:1px solid #da3633;background:rgba(218,54,51,0.1);color:#da3633;">${el.content}</div>`;
+                    case 'alert-warning':
+                        return `<div style="padding:12px 16px;border-radius:8px;border:1px solid #d29922;background:rgba(210,153,34,0.1);color:#d29922;">${el.content}</div>`;
+                    case 'table': {
+                        const rows = el.content.split('\n').filter(s => s.trim());
+                        if (rows.length === 0) return '';
+                        const header = rows[0].split('|');
+                        const data = rows.slice(1).map(r => r.split('|'));
+                        let table = `<table style="width:100%;border-collapse:collapse;"><thead><tr>`;
+                        header.forEach(h => {
+                            table +=
+                                `<th style="background:#f3f4f6;padding:10px 12px;text-align:left;border:1px solid #e5e7eb;font-weight:600;">${h.trim()}</th>`;
+                        });
+                        table += `</tr></thead><tbody>`;
+                        data.forEach(row => {
+                            table += `<tr>`;
+                            row.forEach(cell => {
+                                table +=
+                                    `<td style="padding:8px 12px;border:1px solid #e5e7eb;">${cell.trim()}</td>`;
+                            });
+                            table += `</tr>`;
+                        });
+                        table += `</tbody></table>`;
+                        return table;
+                    }
+                    case 'video':
+                        return `<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;background:#0a0e17;"><iframe src="${el.content}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen></iframe></div>`;
+                    case 'gallery': {
+                        const images = el.content.split(',').filter(s => s.trim());
+                        return `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">${images.map(img => `<img src="${img.trim()}" style="width:100%;height:100px;object-fit:cover;border-radius:6px;">`).join('')}</div>`;
+                    }
+                    case 'checkbox':
+                        return `<div style="display:flex;align-items:center;gap:10px;"><input type="checkbox" style="width:18px;height:18px;accent-color:#1f6feb;"> <span>${el.content}</span></div>`;
+                    case 'radio':
+                        return `<div style="display:flex;align-items:center;gap:10px;"><input type="radio" name="radio" style="width:18px;height:18px;accent-color:#1f6feb;"> <span>${el.content}</span></div>`;
+                    case 'select':
+                        return `<select style="width:100%;padding:10px 14px;border:2px solid #d1d5db;border-radius:8px;font-size:16px;background:white;"><option>${el.content}</option><option>Вариант 2</option><option>Вариант 3</option></select>`;
+                    case 'date':
+                        return `<input type="date" style="width:100%;padding:10px 14px;border:2px solid #d1d5db;border-radius:8px;font-size:16px;">`;
+                    case 'color':
+                        return `<input type="color" style="width:50px;height:50px;padding:2px;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;">`;
+                    case 'range':
+                        return `<input type="range" style="width:100%;accent-color:#1f6feb;">`;
+                    case 'tag':
+                        return `<span style="display:inline-block;background:#e5e7eb;color:#1f2937;padding:4px 12px;border-radius:4px;font-size:13px;margin:2px;">${el.content}</span>`;
+                    case 'tag-blue':
+                        return `<span style="display:inline-block;background:#dbeafe;color:#1f6feb;padding:4px 12px;border-radius:4px;font-size:13px;margin:2px;">${el.content}</span>`;
+                    case 'tag-green':
+                        return `<span style="display:inline-block;background:#d1fae5;color:#238636;padding:4px 12px;border-radius:4px;font-size:13px;margin:2px;">${el.content}</span>`;
                     default:
                         return `<div${styleAttr}>${el.content}</div>`;
                 }
@@ -837,7 +1296,8 @@
                 * { box-sizing: border-box; }
                 img { max-width: 100%; }
                 button { cursor: pointer; }
-                input, textarea { font-family: inherit; }
+                input, textarea, select { font-family: inherit; }
+                a { text-decoration: none; }
             </style>
         </head>
         <body>
@@ -847,25 +1307,13 @@
         }
 
         // ============================================
-        //  ХОСТИНГ (публикация)
+        //  ХОСТИНГ
         // ============================================
         async function publishSite() {
-            const modal = document.getElementById('hostingModal');
-            const status = document.getElementById('publishStatus');
-            const linkEl = document.getElementById('publishedLink');
-            const previewFrame = document.getElementById('previewFrame');
-
-            modal.classList.add('active');
-            status.className = 'status loading';
-            status.textContent = '⏳ Публикация на хостинг...';
-
             try {
                 const html = generateHTML();
-                
-                // Генерируем уникальный ID
                 siteId = 'site_' + Date.now().toString(36) + '_' + Math.random().toString(36).substr(2, 6);
-                
-                // Сохраняем в localStorage (это наш "хостинг")
+
                 const sites = JSON.parse(localStorage.getItem('sitecraft_hosted') || '{}');
                 sites[siteId] = {
                     html: html,
@@ -876,60 +1324,80 @@
                 localStorage.setItem('sitecraft_hosted', JSON.stringify(sites));
                 localStorage.setItem('sitecraft_current_site', siteId);
 
-                // Формируем ссылку для просмотра
-                // Используем текущую страницу как просмотрщик
                 publishedUrl = window.location.origin + window.location.pathname + '?site=' + siteId;
-                
-                // Сохраняем для просмотра
                 localStorage.setItem('sitecraft_published_url', publishedUrl);
                 localStorage.setItem('sitecraft_published_id', siteId);
 
-                // Показываем ссылку
-                linkEl.textContent = publishedUrl;
+                // Открываем сайт в режиме просмотра
+                openViewMode(html);
 
-                // Показываем предпросмотр
-                previewFrame.srcdoc = html;
-
-                // Обновляем статистику
-                document.getElementById('elementCount').textContent = elements.length;
-                document.getElementById('viewCount').textContent = '0';
-                document.getElementById('siteAge').textContent = '0 мин';
-
-                status.className = 'status success';
-                status.textContent = '✅ Сайт успешно опубликован на хостинге!';
-
-                // Автоматически копируем ссылку
+                // Копируем ссылку
                 try {
                     await navigator.clipboard?.writeText(publishedUrl);
                 } catch (e) {}
 
             } catch (error) {
-                status.className = 'status error';
-                status.textContent = `❌ Ошибка: ${error.message}`;
-                console.error('Ошибка публикации:', error);
+                alert('Ошибка публикации: ' + error.message);
             }
         }
 
         // ============================================
-        //  ПРОСМОТР САЙТА ПО ССЫЛКЕ
+        //  РЕЖИМ ПРОСМОТРА (только сайт, без редактора)
+        // ============================================
+        function openViewMode(html) {
+            const modal = document.getElementById('viewModal');
+            const content = document.getElementById('viewContent');
+            content.innerHTML = html;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeViewMode() {
+            document.getElementById('viewModal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ============================================
+        //  ПРОСМОТР ПО ССЫЛКЕ (с другого устройства)
         // ============================================
         function viewSite() {
             const params = new URLSearchParams(window.location.search);
             const siteId = params.get('site');
-            
+
             if (siteId) {
                 try {
                     const sites = JSON.parse(localStorage.getItem('sitecraft_hosted') || '{}');
                     const site = sites[siteId];
-                    
+
                     if (site) {
                         // Увеличиваем счётчик просмотров
                         site.views = (site.views || 0) + 1;
                         sites[siteId] = site;
                         localStorage.setItem('sitecraft_hosted', JSON.stringify(sites));
-                        
-                        // Показываем сайт
+
+                        // Показываем сайт в режиме просмотра
+                        document.body.innerHTML = '';
+                        document.body.style.background = '#ffffff';
+                        document.body.style.margin = '0';
+                        document.body.style.padding = '0';
+                        document.body.style.overflow = 'auto';
                         document.body.innerHTML = site.html;
+
+                        // Добавляем кнопку "Вернуться" если есть localStorage (создатель сайта)
+                        try {
+                            const currentSite = localStorage.getItem('sitecraft_current_site');
+                            if (currentSite === siteId) {
+                                const backBtn = document.createElement('div');
+                                backBtn.style.cssText =
+                                    'position:fixed;top:20px;right:20px;background:#161b22;color:white;padding:10px 20px;border:none;border-radius:8px;cursor:pointer;font-weight:600;z-index:9999;font-family:sans-serif;box-shadow:0 4px 12px rgba(0,0,0,0.3);';
+                                backBtn.textContent = '✕ Редактировать';
+                                backBtn.onclick = () => {
+                                    window.location.href = window.location.pathname;
+                                };
+                                document.body.appendChild(backBtn);
+                            }
+                        } catch (e) {}
+
                         document.title = 'Сайт на SiteCraft';
                         return true;
                     }
@@ -939,19 +1407,12 @@
         }
 
         // ============================================
-        //  УПРАВЛЕНИЕ МОДАЛКОЙ
+        //  УПРАВЛЕНИЕ
         // ============================================
-        function closeHosting() {
-            document.getElementById('hostingModal').classList.remove('active');
-        }
-
         function copyLink() {
-            const link = document.getElementById('publishedLink').textContent;
+            const link = publishedUrl || window.location.href;
             navigator.clipboard?.writeText(link).then(() => {
-                const btn = document.querySelector('.copy-btn');
-                const originalText = btn.textContent;
-                btn.textContent = '✅ Скопировано!';
-                setTimeout(() => btn.textContent = originalText, 2000);
+                alert('✅ Ссылка скопирована!');
             }).catch(() => {
                 const input = document.createElement('input');
                 input.value = link;
@@ -959,24 +1420,12 @@
                 input.select();
                 document.execCommand('copy');
                 document.body.removeChild(input);
-                alert('Ссылка скопирована!');
+                alert('✅ Ссылка скопирована!');
             });
         }
 
-        function openPublishedSite() {
-            const link = document.getElementById('publishedLink').textContent;
-            if (link) {
-                // Открываем в новой вкладке
-                window.open(link, '_blank');
-            }
-        }
-
-        document.getElementById('hostingModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('hostingModal')) closeHosting();
-        });
-
         // ============================================
-        //  РЕНДЕРИНГ КАНВАСА
+        //  РЕНДЕРИНГ
         // ============================================
         function renderCanvas() {
             const canvas = document.getElementById('canvas');
@@ -1021,6 +1470,14 @@
                     }
                 }
 
+                if (el.type === 'button' && el.link) {
+                    const linkLabel = document.createElement('div');
+                    linkLabel.style.cssText =
+                        'font-size:10px; color:#8b949e; margin-top:4px; font-family:monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;';
+                    linkLabel.textContent = `🔗 ${el.link}`;
+                    div.appendChild(linkLabel);
+                }
+
                 div.draggable = true;
                 div.addEventListener('dragstart', (e) => {
                     e.dataTransfer.setData('text/plain', el.id);
@@ -1049,6 +1506,14 @@
                     document.getElementById('propSize').value = el.style?.fontSize ? parseInt(el.style.fontSize) : 16;
                     document.getElementById('propAlign').value = el.style?.textAlign || 'left';
                     document.getElementById('propBg').value = el.style?.background || '#ffffff';
+
+                    const linkGroup = document.getElementById('linkGroup');
+                    if (el.type === 'button' || el.type === 'button-outline') {
+                        linkGroup.style.display = 'block';
+                        document.getElementById('propLink').value = el.link || '';
+                    } else {
+                        linkGroup.style.display = 'none';
+                    }
                 }
             } else {
                 document.getElementById('propertiesPanel').classList.remove('active');
@@ -1066,18 +1531,110 @@
                     return `<h2>${content}</h2>`;
                 case 'text':
                     return `<p>${content}</p>`;
-                case 'button':
-                    return `<button style="background:#1f6feb;color:white;padding:12px 30px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">${content}</button>`;
+                case 'small-text':
+                    return `<p style="font-size:13px;color:#6b7280;">${content}</p>`;
+                case 'button': {
+                    const link = el.link || '#';
+                    return `<a href="${link}" target="_blank" style="text-decoration:none;"><button style="background:#1f6feb;color:white;padding:10px 28px;border:none;border-radius:8px;font-weight:600;cursor:pointer;">${content}</button></a>`;
+                }
+                case 'button-outline': {
+                    const link = el.link || '#';
+                    return `<a href="${link}" target="_blank" style="text-decoration:none;"><button style="background:transparent;color:#1f6feb;padding:10px 28px;border:2px solid #1f6feb;border-radius:8px;font-weight:600;cursor:pointer;">${content}</button></a>`;
+                }
                 case 'image-placeholder':
                     return `<img src="${content}" alt="Изображение" style="max-width:100%;border-radius:8px;">`;
                 case 'divider':
-                    return `<hr style="border:none;border-top:2px solid #e5e7eb;margin:20px 0;">`;
+                    return `<hr style="border:none;border-top:2px solid #e5e7eb;margin:15px 0;">`;
+                case 'divider-dashed':
+                    return `<hr style="border:none;border-top:2px dashed #e5e7eb;margin:15px 0;">`;
+                case 'divider-dotted':
+                    return `<hr style="border:none;border-top:2px dotted #e5e7eb;margin:15px 0;">`;
                 case 'input':
-                    return `<input type="text" placeholder="${content}" style="width:100%;padding:12px 16px;border:2px solid #d1d5db;border-radius:8px;font-size:16px;">`;
+                    return `<input type="text" placeholder="${content}" style="width:100%;padding:10px 14px;border:2px solid #d1d5db;border-radius:8px;font-size:16px;">`;
                 case 'textarea':
-                    return `<textarea placeholder="${content}" style="width:100%;padding:12px 16px;border:2px solid #d1d5db;border-radius:8px;font-size:16px;min-height:100px;resize:vertical;font-family:inherit;"></textarea>`;
+                    return `<textarea placeholder="${content}" style="width:100%;padding:10px 14px;border:2px solid #d1d5db;border-radius:8px;font-size:16px;min-height:80px;resize:vertical;font-family:inherit;"></textarea>`;
                 case 'card':
                     return `<div style="background:#f9fafb;border:1px solid #e5e7eb;padding:20px;border-radius:12px;">${content}</div>`;
+                case 'card-shadow':
+                    return `<div style="background:#ffffff;border:1px solid #e5e7eb;padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.08);">${content}</div>`;
+                case 'card-colored':
+                    return `<div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:20px;border-radius:12px;">${content}</div>`;
+                case 'list': {
+                    const items = content.split('\n').filter(s => s.trim());
+                    return `<ul style="padding-left:20px;line-height:1.8;">${items.map(i => `<li>${i}</li>`).join('')}</ul>`;
+                }
+                case 'list-number': {
+                    const items = content.split('\n').filter(s => s.trim());
+                    return `<ol style="padding-left:20px;line-height:1.8;">${items.map(i => `<li>${i}</li>`).join('')}</ol>`;
+                }
+                case 'quote':
+                    return `<blockquote style="background:#f3f4f6;border-left:4px solid #1f6feb;padding:15px 20px;border-radius:4px;font-style:italic;font-size:18px;color:#374151;">${content}</blockquote>`;
+                case 'badge':
+                    return `<span style="display:inline-block;background:#1f6feb;color:white;padding:4px 14px;border-radius:20px;font-size:14px;font-weight:600;">${content}</span>`;
+                case 'badge-success':
+                    return `<span style="display:inline-block;background:#238636;color:white;padding:4px 14px;border-radius:20px;font-size:14px;font-weight:600;">${content}</span>`;
+                case 'badge-danger':
+                    return `<span style="display:inline-block;background:#da3633;color:white;padding:4px 14px;border-radius:20px;font-size:14px;font-weight:600;">${content}</span>`;
+                case 'badge-warning':
+                    return `<span style="display:inline-block;background:#d29922;color:#0a0e17;padding:4px 14px;border-radius:20px;font-size:14px;font-weight:600;">${content}</span>`;
+                case 'progress':
+                    return `<div style="width:100%;height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden;"><div style="height:100%;background:#1f6feb;border-radius:4px;width:70%;"></div></div>`;
+                case 'progress-success':
+                    return `<div style="width:100%;height:8px;background:#e5e7eb;border-radius:4px;overflow:hidden;"><div style="height:100%;background:#238636;border-radius:4px;width:45%;"></div></div>`;
+                case 'alert':
+                    return `<div style="padding:12px 16px;border-radius:8px;border:1px solid #e5e7eb;background:#f3f4f6;">${content}</div>`;
+                case 'alert-success':
+                    return `<div style="padding:12px 16px;border-radius:8px;border:1px solid #238636;background:rgba(35,134,54,0.1);color:#238636;">${content}</div>`;
+                case 'alert-danger':
+                    return `<div style="padding:12px 16px;border-radius:8px;border:1px solid #da3633;background:rgba(218,54,51,0.1);color:#da3633;">${content}</div>`;
+                case 'alert-warning':
+                    return `<div style="padding:12px 16px;border-radius:8px;border:1px solid #d29922;background:rgba(210,153,34,0.1);color:#d29922;">${content}</div>`;
+                case 'table': {
+                    const rows = content.split('\n').filter(s => s.trim());
+                    if (rows.length === 0) return '';
+                    const header = rows[0].split('|');
+                    const data = rows.slice(1).map(r => r.split('|'));
+                    let table = `<table style="width:100%;border-collapse:collapse;"><thead><tr>`;
+                    header.forEach(h => {
+                        table +=
+                            `<th style="background:#f3f4f6;padding:10px 12px;text-align:left;border:1px solid #e5e7eb;font-weight:600;">${h.trim()}</th>`;
+                    });
+                    table += `</tr></thead><tbody>`;
+                    data.forEach(row => {
+                        table += `<tr>`;
+                        row.forEach(cell => {
+                            table +=
+                                `<td style="padding:8px 12px;border:1px solid #e5e7eb;">${cell.trim()}</td>`;
+                        });
+                        table += `</tr>`;
+                    });
+                    table += `</tbody></table>`;
+                    return table;
+                }
+                case 'video':
+                    return `<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;background:#0a0e17;"><iframe src="${content}" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allowfullscreen></iframe></div>`;
+                case 'gallery': {
+                    const images = content.split(',').filter(s => s.trim());
+                    return `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">${images.map(img => `<img src="${img.trim()}" style="width:100%;height:100px;object-fit:cover;border-radius:6px;">`).join('')}</div>`;
+                }
+                case 'checkbox':
+                    return `<div style="display:flex;align-items:center;gap:10px;"><input type="checkbox" style="width:18px;height:18px;accent-color:#1f6feb;"> <span>${content}</span></div>`;
+                case 'radio':
+                    return `<div style="display:flex;align-items:center;gap:10px;"><input type="radio" name="radio" style="width:18px;height:18px;accent-color:#1f6feb;"> <span>${content}</span></div>`;
+                case 'select':
+                    return `<select style="width:100%;padding:10px 14px;border:2px solid #d1d5db;border-radius:8px;font-size:16px;background:white;"><option>${content}</option><option>Вариант 2</option><option>Вариант 3</option></select>`;
+                case 'date':
+                    return `<input type="date" style="width:100%;padding:10px 14px;border:2px solid #d1d5db;border-radius:8px;font-size:16px;">`;
+                case 'color':
+                    return `<input type="color" style="width:50px;height:50px;padding:2px;border:2px solid #d1d5db;border-radius:8px;cursor:pointer;">`;
+                case 'range':
+                    return `<input type="range" style="width:100%;accent-color:#1f6feb;">`;
+                case 'tag':
+                    return `<span style="display:inline-block;background:#e5e7eb;color:#1f2937;padding:4px 12px;border-radius:4px;font-size:13px;margin:2px;">${content}</span>`;
+                case 'tag-blue':
+                    return `<span style="display:inline-block;background:#dbeafe;color:#1f6feb;padding:4px 12px;border-radius:4px;font-size:13px;margin:2px;">${content}</span>`;
+                case 'tag-green':
+                    return `<span style="display:inline-block;background:#d1fae5;color:#238636;padding:4px 12px;border-radius:4px;font-size:13px;margin:2px;">${content}</span>`;
                 default:
                     return `<div>${content}</div>`;
             }
@@ -1086,7 +1643,7 @@
         // ============================================
         //  УПРАВЛЕНИЕ ЭЛЕМЕНТАМИ
         // ============================================
-        function addElement(type, content, order) {
+        function addElement(type, content, order, link) {
             const el = {
                 id: ++elementIdCounter,
                 type: type,
@@ -1099,13 +1656,18 @@
                     background: 'transparent'
                 }
             };
+
+            if ((type === 'button' || type === 'button-outline') && link) {
+                el.link = link;
+            }
+
             elements.push(el);
             renderCanvas();
             selectElement(el.id);
 
             setTimeout(() => {
-                const canvasWrapper = document.getElementById('canvasWrapper');
-                canvasWrapper.scrollTop = canvasWrapper.scrollHeight;
+                const wrapper = document.getElementById('canvasWrapper');
+                wrapper.scrollTop = wrapper.scrollHeight;
             }, 50);
         }
 
@@ -1131,6 +1693,10 @@
 
             if (prop === 'text') {
                 el.content = value;
+            } else if (prop === 'link') {
+                el.link = value;
+                renderCanvas();
+                return;
             } else if (prop === 'color') {
                 if (!el.style) el.style = {};
                 el.style.color = value;
@@ -1169,7 +1735,7 @@
         }
 
         // ============================================
-        //  ЛОКАЛЬНОЕ СОХРАНЕНИЕ
+        //  СОХРАНЕНИЕ
         // ============================================
         function saveLocal() {
             try {
@@ -1198,7 +1764,8 @@
             item.addEventListener('dragstart', (e) => {
                 e.dataTransfer.setData('text/plain', JSON.stringify({
                     type: item.dataset.type,
-                    content: item.dataset.content
+                    content: item.dataset.content,
+                    link: item.dataset.link || ''
                 }));
                 e.dataTransfer.effectAllowed = 'copy';
             });
@@ -1215,7 +1782,7 @@
             if (!data) return;
             try {
                 const parsed = JSON.parse(data);
-                addElement(parsed.type, parsed.content);
+                addElement(parsed.type, parsed.content, undefined, parsed.link);
             } catch (err) {}
         });
 
@@ -1250,11 +1817,15 @@
             // Если нет, загружаем конструктор
             if (!loadLocal()) {
                 setTimeout(() => {
-                    addElement('heading', 'Добро пожаловать в SiteCraft!');
-                    addElement('text', 'Создайте свой первый сайт за 5 минут. Перетаскивайте элементы и редактируйте их.');
-                    addElement('button', 'Начать');
+                    addElement('heading', 'Добро пожаловать в SiteCraft PRO!');
+                    addElement('text', 'Теперь доступно 30+ элементов для создания сайтов.');
+                    addElement('button', 'Начать', undefined, 'https://example.com');
+                    addElement('badge', 'Новинка');
                     addElement('divider', '');
-                    addElement('card', '✨ Это карточка. Вы можете добавить сюда любой контент.');
+                    addElement('card', '✨ Карточка с контентом');
+                    addElement('list', 'Пункт 1\nПункт 2\nПункт 3');
+                    addElement('alert-success', '✅ Успешная операция!');
+                    addElement('progress', '');
                     addElement('input', 'Введите ваш email');
                     addElement('textarea', 'Ваше сообщение...');
                     selectedId = null;
@@ -1263,11 +1834,11 @@
             }
         }
 
-        console.log('🚀 SiteCraft с собственным хостингом загружен!');
+        console.log('🚀 SiteCraft PRO загружен!');
         console.log(`📁 Элементов: ${elements.length}`);
-        console.log('🌐 Нажмите "Хостинг" чтобы опубликовать сайт!');
-        console.log('📱 Сайт откроется на любом устройстве без регистрации!');
-        console.log('🔗 Ссылка будет вида: ваш-сайт?site=уникальный-id');
+        console.log('🎨 Доступно 30+ элементов!');
+        console.log('📜 Скролл работает!');
+        console.log('🔗 При открытии ссылки показывается ТОЛЬКО САЙТ!');
     </script>
 </body>
 </html>
