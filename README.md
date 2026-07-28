@@ -71,7 +71,6 @@
         .passport-id i { font-size: 2rem; color: #6ad4a8; }
         .passport-id .id-number { font-family: 'Courier New', monospace; letter-spacing: 2px; font-size: 1.2rem; color: #b3f0d0; }
 
-        /* ===== ФИНАНСЫ ===== */
         .finance-block {
             background: rgba(12, 24, 38, 0.7); backdrop-filter: blur(4px);
             border-radius: 32px; padding: 2rem 2.5rem;
@@ -88,6 +87,12 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             margin: 0.5rem 0 0.3rem;
         }
+        .finance-block .balance.infinity {
+            background: linear-gradient(135deg, #ffd700, #ff6b00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 3.2rem;
+        }
         .finance-block .currency { font-size: 1.2rem; color: #b0c9e8; -webkit-text-fill-color: #b0c9e8; }
         .finance-block .label { color: #8eb3d4; font-size: 0.9rem; }
 
@@ -100,6 +105,16 @@
         .user-greeting i { color: #64f0b0; }
         .user-greeting .logout-btn { color: #ff8a8a; cursor: pointer; font-size: 0.9rem; border: 1px solid #ff5a5a44; padding: 0.2rem 0.8rem; border-radius: 20px; background: transparent; }
         .user-greeting .logout-btn:hover { background: #ff2a2a22; border-color: #ff5a5a; }
+        .user-greeting .president-badge {
+            background: linear-gradient(135deg, #ffd700, #ff6b00);
+            color: #0b141c;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.1rem 0.6rem;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
         #loginForm {
             display: none;
@@ -147,6 +162,7 @@
             .passport-box, .finance-block { max-width: 100%; }
             #loginForm { padding: 1.5rem; }
             .finance-block .balance { font-size: 2rem; }
+            .finance-block .balance.infinity { font-size: 2.4rem; }
         }
     </style>
 </head>
@@ -166,6 +182,7 @@
             <span class="user-greeting" id="greeting">
                 <i class="fas fa-user-circle"></i>
                 <span id="userName">Семён</span>
+                <span class="president-badge" id="presidentBadge" style="display:none;">Президент</span>
                 <span class="logout-btn" onclick="logout()">Выйти</span>
             </span>
             <button class="btn-login" id="loginBtn" onclick="showLogin()">
@@ -179,7 +196,7 @@
         <h2 style="color: #d4ebff; margin-bottom: 0.3rem;"><i class="fas fa-user-lock" style="color: #59dba6;"></i> Вход</h2>
         <p style="color: #8eb3d4; margin-bottom: 1.5rem;">Введите логин и пароль</p>
         <label>Логин</label>
-        <input type="text" id="loginUser" placeholder="Семён, Азар или Вика">
+        <input type="text" id="loginUser" placeholder="Семён, Азар, Вика или Президент">
         <label>Пароль</label>
         <input type="password" id="loginPass" placeholder="Введите пароль">
         <div class="error" id="loginError">Неверный логин или пароль</div>
@@ -263,6 +280,7 @@
 <script>
     // ===== ДАННЫЕ АККАУНТОВ =====
     var users = {
+        'Президент': { password: '630036', balance: Infinity },
         'Семён': { password: '135264', balance: 1000000 },
         'Азар': { password: '342567', balance: 0 },
         'Вика': { password: '845986', balance: 0 }
@@ -318,6 +336,7 @@
         var passportName = document.getElementById('passportName');
         var balanceDisplay = document.getElementById('balanceDisplay');
         var financeOwner = document.getElementById('financeOwner');
+        var presidentBadge = document.getElementById('presidentBadge');
 
         if (currentUser) {
             greeting.style.display = 'flex';
@@ -325,15 +344,26 @@
             nameDisplay.textContent = currentUser;
             passportName.textContent = currentUser + ' (гражданин)';
             financeOwner.textContent = currentUser;
-            // Показываем баланс
-            var bal = users[currentUser].balance;
-            balanceDisplay.textContent = bal.toLocaleString('ru-RU');
+
+            // Проверяем, президент ли это
+            if (currentUser === 'Президент') {
+                presidentBadge.style.display = 'inline';
+                balanceDisplay.textContent = '∞';
+                balanceDisplay.className = 'balance infinity';
+            } else {
+                presidentBadge.style.display = 'none';
+                balanceDisplay.className = 'balance';
+                var bal = users[currentUser].balance;
+                balanceDisplay.textContent = bal.toLocaleString('ru-RU');
+            }
         } else {
             greeting.style.display = 'none';
             loginBtn.style.display = 'inline-flex';
             passportName.textContent = 'Team-2026';
             financeOwner.textContent = 'Гость';
             balanceDisplay.textContent = '0';
+            balanceDisplay.className = 'balance';
+            presidentBadge.style.display = 'none';
         }
     }
 
