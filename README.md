@@ -210,7 +210,6 @@
         <span class="dept-tag"><i class="fas fa-chart-line"></i> Экономики</span>
     </div>
 
-    <!-- ===== ФИНАНСЫ ===== -->
     <div class="finance-block section-scroll" id="finance">
         <h3><i class="fas fa-coins"></i> Финансы</h3>
         <div class="label">Банковский счёт</div>
@@ -254,11 +253,11 @@
             <li><i class="fas fa-user"></i> Гражданин: <span id="passportName">Team-2026</span></li>
             <li><i class="fas fa-calendar-alt"></i> Дата регистрации: 01.01.2026</li>
             <li><i class="fas fa-shield-alt"></i> Статус: <span style="color: #6ee6b0;">активный</span></li>
-            <li><i class="fas fa-fingerprint"></i> Цифровой ID: #T-0428</li>
+            <li><i class="fas fa-fingerprint"></i> Цифровой ID: <span id="passportId">#T-0000</span></li>
         </ul>
         <div class="passport-id">
             <i class="fas fa-qrcode"></i>
-            <span class="id-number">TEAM-2026-0X7F</span>
+            <span class="id-number" id="passportNumber">TEAM-2026-0000</span>
             <i class="fas fa-chevron-right" style="color: #4b9f7a;"></i>
         </div>
         <p style="margin-top: 0.8rem; font-size: 0.9rem; color: #9bb9db;"><i class="fas fa-sync-alt" style="color: #4edb9e;"></i> Действителен до: 01.01.2028</p>
@@ -278,12 +277,32 @@
 </div>
 
 <script>
-    // ===== ДАННЫЕ АККАУНТОВ =====
+    // ===== ДАННЫЕ АККАУНТОВ С УНИКАЛЬНЫМИ ПАСПОРТАМИ =====
     var users = {
-        'Президент': { password: '630036', balance: Infinity },
-        'Семён': { password: '135264', balance: 1000000 },
-        'Азар': { password: '342567', balance: 0 },
-        'Вика': { password: '845986', balance: 0 }
+        'Президент': { 
+            password: '630036', 
+            balance: Infinity,
+            passportId: '#T-0001',
+            passportNumber: 'TEAM-2026-0001'
+        },
+        'Семён': { 
+            password: '135264', 
+            balance: 1000000,
+            passportId: '#T-0428',
+            passportNumber: 'TEAM-2026-0428'
+        },
+        'Азар': { 
+            password: '342567', 
+            balance: 0,
+            passportId: '#T-0917',
+            passportNumber: 'TEAM-2026-0917'
+        },
+        'Вика': { 
+            password: '845986', 
+            balance: 0,
+            passportId: '#T-1523',
+            passportNumber: 'TEAM-2026-1523'
+        }
     };
 
     var currentUser = null;
@@ -334,18 +353,22 @@
         var loginBtn = document.getElementById('loginBtn');
         var nameDisplay = document.getElementById('userName');
         var passportName = document.getElementById('passportName');
+        var passportId = document.getElementById('passportId');
+        var passportNumber = document.getElementById('passportNumber');
         var balanceDisplay = document.getElementById('balanceDisplay');
         var financeOwner = document.getElementById('financeOwner');
         var presidentBadge = document.getElementById('presidentBadge');
 
         if (currentUser) {
+            var userData = users[currentUser];
             greeting.style.display = 'flex';
             loginBtn.style.display = 'none';
             nameDisplay.textContent = currentUser;
             passportName.textContent = currentUser + ' (гражданин)';
+            passportId.textContent = userData.passportId;
+            passportNumber.textContent = userData.passportNumber;
             financeOwner.textContent = currentUser;
 
-            // Проверяем, президент ли это
             if (currentUser === 'Президент') {
                 presidentBadge.style.display = 'inline';
                 balanceDisplay.textContent = '∞';
@@ -353,13 +376,14 @@
             } else {
                 presidentBadge.style.display = 'none';
                 balanceDisplay.className = 'balance';
-                var bal = users[currentUser].balance;
-                balanceDisplay.textContent = bal.toLocaleString('ru-RU');
+                balanceDisplay.textContent = userData.balance.toLocaleString('ru-RU');
             }
         } else {
             greeting.style.display = 'none';
             loginBtn.style.display = 'inline-flex';
             passportName.textContent = 'Team-2026';
+            passportId.textContent = '#T-0000';
+            passportNumber.textContent = 'TEAM-2026-0000';
             financeOwner.textContent = 'Гость';
             balanceDisplay.textContent = '0';
             balanceDisplay.className = 'balance';
