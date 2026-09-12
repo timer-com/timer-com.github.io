@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Интерактивная среда Triton (.tn)</title>
+    <title>Интерактивная среда Triton|TC (.tn)</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
         body { background: #1a1a1f; color: #f5f5f5; display: flex; height: 100vh; overflow: hidden; }
