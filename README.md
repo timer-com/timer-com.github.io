@@ -127,6 +127,8 @@
             <p class="meta" style="margin-top: 5px;">&copy; 2026 Все права защищены.</p>
         </div>
     </footer>
-
+    <head>
+  <link rel="icon" type="image/png" href="favicon.png">
+</head>
     </body>
  </html>
